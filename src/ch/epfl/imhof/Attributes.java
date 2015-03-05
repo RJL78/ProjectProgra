@@ -10,7 +10,7 @@ public final class Attributes {
     private Map<String,String> attributes; 
     
     public Attributes(Map<String, String> attributes){
-        this.attributes = Collections.unmodifiableMap( new HashMap (attributes)); 
+        this.attributes = Collections.unmodifiableMap( new HashMap<String, String> (attributes)); 
     }
     
     public boolean isEmpty(){
@@ -52,5 +52,21 @@ public final class Attributes {
         }
         return new Attributes(newMap);
     }
-
+    
+    public static final class Builder {
+        
+        private HashMap<String,String> mapToBuild;
+        
+        public Builder (){
+            mapToBuild = new HashMap<String,String>(); 
+        }
+        
+        public void put(String key, String value){
+            mapToBuild.put(key, value);
+        }
+        
+        public Attributes build(){
+            return new Attributes(mapToBuild);
+        }
+    }
 }
