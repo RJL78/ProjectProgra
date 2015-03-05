@@ -90,3 +90,6 @@ public final class ClosedPolyLine extends PolyLine {
         return (indice!=0);
     }
 }
+
+
+// test marker 123 
