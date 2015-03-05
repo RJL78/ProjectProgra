@@ -3,6 +3,7 @@ package ch.epfl.imhof;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 public final class Attributes {
     
@@ -29,15 +30,27 @@ public final class Attributes {
     }
     
     public int get(String key, int defaultValue){
-        int output; 
-        return attributes.get
+        Integer output; 
         try{ 
-            attributes.getOrDefault(key, defaultValue); 
+            output = Integer.parseInt(attributes.get(key)); 
         }
-        catch{ 
-            
+        catch(ClassCastException e){
+            return defaultValue; 
         }
-
+        if (output == null){
+            return defaultValue; 
+        }
+        else{
+            return output; 
+        }
+    }
+    
+    public Attributes keepOnlyKeys(Set<String> keysToKeep){
+        HashMap<String,String> newMap = new HashMap<String,String>(); 
+        for (String keyToKeep: keysToKeep){
+            newMap.put(keyToKeep,attributes.get(keyToKeep));
+        }
+        return new Attributes(newMap);
     }
 
 }
