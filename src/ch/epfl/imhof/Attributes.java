@@ -37,12 +37,11 @@ public final class Attributes {
         catch(ClassCastException e){
             return defaultValue; 
         }
-        if (output == null){
-            return defaultValue; 
+        // pck si get(key) renvoi null (car pas de clé ainsi) alors on a cette exception
+        catch(NumberFormatException e){
+            return defaultValue;
         }
-        else{
-            return output; 
-        }
+            return output; // on renvois un Integer et pas un int ?
     }
     
     public Attributes keepOnlyKeys(Set<String> keysToKeep){

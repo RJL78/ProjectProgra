@@ -6,7 +6,7 @@ public final class Attributed<T> {
     private Attributes attributes; 
     
     public Attributed (T value, Attributes attributes){
-        inputValue = value; 
+        inputValue = value; // si T est un type évolué, pas immuable ?
         this.attributes = attributes;
     }
     
