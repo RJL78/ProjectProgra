@@ -1,6 +1,7 @@
 package ch.epfl.imhof;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 import org.junit.Test;
 import java.util.HashMap;
@@ -39,9 +40,11 @@ public class AttributesTest {
        Attributes attributes = new Attributes(testmap);
        Set<String> keys= new HashSet<String>();
        keys.add("Name");
+       keys.add("prout");
        Attributes newOne=attributes.keepOnlyKeys(keys);
        assertEquals("Leman",newOne.get("Name","oups"));
        assertEquals("oups",newOne.get("Area", "oups"));
+       assertFalse(newOne.contains("prout"));
    } 
 
 }
