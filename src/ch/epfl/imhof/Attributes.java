@@ -30,18 +30,14 @@ public final class Attributes {
     }
     
     public int get(String key, int defaultValue){
-        Integer output; 
+        int output; 
         try{ 
             output = Integer.parseInt(attributes.get(key)); 
         }
-        catch(ClassCastException e){
-            return defaultValue; 
-        }
-        // pck si get(key) renvoi null (car pas de clé ainsi) alors on a cette exception
         catch(NumberFormatException e){
             return defaultValue;
         }
-            return output; // on renvois un Integer et pas un int ?
+        return output; 
     }
     
     public Attributes keepOnlyKeys(Set<String> keysToKeep){
