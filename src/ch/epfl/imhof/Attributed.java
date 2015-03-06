@@ -20,7 +20,7 @@ public final class Attributed<T> {
      * @return Instance représentant un Attributed
      */
     public Attributed (T value, Attributes attributes){
-        inputValue = value; // si T est un type évolué, pas immuable ?
+        inputValue = value;
         this.attributes = attributes;
     }
     /**
