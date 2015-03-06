@@ -21,6 +21,8 @@ public class AttributesTest {
        Attributes attributes = new Attributes(testmap);
        testmap.clear();
        assertEquals("Leman",attributes.get("Name"));
+       testmap.put("Name", "Leman");
+       testmap.put("Area","123");
    }
    
    @Test

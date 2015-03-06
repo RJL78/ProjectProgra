@@ -11,7 +11,7 @@ public class AttributedTest {
     
    private static Attributes.Builder b = new Attributes.Builder();
    private static Attributes a;
-    static {
+   static {
         b.put("natural", "water");
         b.put("name", "Lac Léman");
         b.put("ele", "372");
