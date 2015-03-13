@@ -47,7 +47,6 @@ public class OSMWayTest extends OSMEntityTest {
     
     @Test
     public void BuilderTest(){
-        System.out.println(b2.isIncomplete());
         w = b2.build();
         this.hasAttributesTest(w,"String1");
         this.hasAttributesTest(w,"String2");

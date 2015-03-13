@@ -17,8 +17,8 @@ public class OSMEntityTest {
         assertFalse(a.get(s)==null);
         assertEquals(e.attributeValue(s),(a.get(s)));
         a = b.build();
-        assert(e.hasAttributes(s));
-        assertFalse(e.hasAttributes("testing"));
+        assert(e.hasAttribute(s));
+        assertFalse(e.hasAttribute("testing"));
     }
     
 

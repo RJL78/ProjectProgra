@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ch.epfl.imhof.Attributes;
-import ch.epfl.imhof.osm.OSMRelation.Member;
 
 public final class OSMWay extends OSMEntity {
     
