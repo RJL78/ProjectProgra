@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ch.epfl.imhof.Attributes;
+import ch.epfl.imhof.osm.OSMRelation.Member;
 
 public final class OSMWay extends OSMEntity {
 
@@ -20,7 +21,11 @@ public final class OSMWay extends OSMEntity {
     }
     
     public List<OSMNode> nodes() {
-        return nodes;
+       List<OSMNode> output = new ArrayList <OSMNode> ();
+       for (OSMNode aNode: nodes){
+           output.add(aNode);
+       }
+       return output;
     }
     
     public List<OSMNode> nonRepeatingNodes() {
@@ -59,7 +64,7 @@ public final class OSMWay extends OSMEntity {
         }
         
         public boolean isIncomplete() {
-            return super.isIncomplete()||nodes.size()<2;
+            return (super.isIncomplete()||nodes.size()<2);
         }
     }
 }

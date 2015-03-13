@@ -32,7 +32,7 @@ public abstract class OSMEntity {
         protected long id;
         protected Attributes.Builder attributes;
         private boolean incomplete;
-        
+
         public Builder(long id) {
             this.id=id;
             incomplete=false;
@@ -44,7 +44,7 @@ public abstract class OSMEntity {
         }
         
         public void setIncomplete() {
-            incomplete=false;
+            incomplete=true;
         }
         
         public boolean isIncomplete() {

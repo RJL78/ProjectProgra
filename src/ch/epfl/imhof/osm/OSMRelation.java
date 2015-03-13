@@ -15,7 +15,11 @@ public final class OSMRelation extends OSMEntity {
     }
     
     public List<Member> members() {
-        return members;
+        List<Member> output = new ArrayList <Member> ();
+        for (Member aMember: members){
+            output.add(aMember);
+        }
+        return output;
     }
     
     public final static class Member {
@@ -53,15 +57,15 @@ public final class OSMRelation extends OSMEntity {
         
         public Builder(long id) {
             super(id);
-            members = new ArrayList<>();
+            members = new ArrayList<Member>();
         }
         
         public void addMember(Member.Type type, String role, OSMEntity newMember) {
             members.add(new Member(type,role,newMember));
         }
         
-        public OSMRelation build() throws IllegalArgumentException {
-            if (isIncomplete()) throw new IllegalArgumentException();
+        public OSMRelation build() throws IllegalStateException {
+            if (isIncomplete()) throw new IllegalStateException();
             return new OSMRelation(id,members,attributes.build());//Comment faire pour id et attributes?Protected?
         }
     }

@@ -25,7 +25,9 @@ public final class OSMNode extends OSMEntity {
         }
         
         public OSMNode build() throws IllegalStateException {
-            if (isIncomplete()) throw new IllegalStateException();
+            if (isIncomplete()){
+                throw new IllegalStateException();
+            }
             return new OSMNode(id,position,attributes.build()); //Comment faire pour id et attributes?Protected?
         }
     }
