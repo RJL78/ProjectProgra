@@ -29,7 +29,7 @@ public final class OSMRelation extends OSMEntity {
     
     public OSMRelation(long id, List<Member> members,Attributes attributes) {
         super(id,attributes);
-        this.members=members;
+        this.members = new ArrayList<Member> (members);
     }
     
     /**
@@ -38,11 +38,7 @@ public final class OSMRelation extends OSMEntity {
      */
     
     public List<Member> members() {
-        List<Member> output = new ArrayList <Member> ();
-        for (Member aMember: members){
-            output.add(aMember);
-        }
-        return output;
+        return new ArrayList <Member> (members);
     }
     
     /**
