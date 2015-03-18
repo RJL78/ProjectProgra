@@ -1,16 +1,14 @@
 package ch.epfl.imhof;
 
-import static org.junit.Assert.*;
-
-import org.junit.Test;
+import static org.junit.Assert.assertTrue;
 
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import ch.epfl.imhof.Graph;
-import ch.epfl.imhof.PointGeo;
+import org.junit.Test;
+
 import ch.epfl.imhof.osm.OSMNode;
 
 
@@ -37,7 +35,7 @@ public class GraphTest {
     }
     
     
-    @Test
+    @Test 
     public void getterImmuable() {
         Set<OSMNode> set = testGraph.nodes();
         set.clear();

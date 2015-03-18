@@ -3,11 +3,12 @@ package ch.epfl.imhof;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
-import org.junit.Test;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.HashSet;
+
+import org.junit.Test;
 
 public class AttributesTest {
    

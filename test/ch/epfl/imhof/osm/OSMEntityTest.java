@@ -1,7 +1,6 @@
 package ch.epfl.imhof.osm;
-import static org.junit.Assert.*;
-
-
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import ch.epfl.imhof.Attributes;
 
 public class OSMEntityTest {

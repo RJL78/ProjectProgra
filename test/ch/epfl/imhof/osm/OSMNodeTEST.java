@@ -1,5 +1,6 @@
 package ch.epfl.imhof.osm;
 import org.junit.Test;
+
 import ch.epfl.imhof.PointGeo;
 
 public class OSMNodeTEST extends OSMEntityTest {
