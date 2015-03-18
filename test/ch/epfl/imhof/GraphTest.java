@@ -35,7 +35,7 @@ public class GraphTest {
     }
     
     
-    @Test 
+    @Test (expected = UnsupportedOperationException.class)
     public void getterImmuable() {
         Set<OSMNode> set = testGraph.nodes();
         set.clear();
@@ -53,7 +53,7 @@ public class GraphTest {
         assertTrue(testGraph.neighborsOf(n1).size()==1); 
     }
     
-    @Test
+    @Test (expected = UnsupportedOperationException.class)
     public void neighborsOfImmuable() {
         Set<OSMNode> set = testGraph.nodes();
         set.clear();
