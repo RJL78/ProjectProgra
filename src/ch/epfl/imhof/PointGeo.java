@@ -25,7 +25,7 @@ public final class PointGeo {
     
     public PointGeo( double longitude, double latitude) throws IllegalArgumentException{
         if (longitude>Math.PI || longitude < -Math.PI || latitude > Math.PI/2 || latitude < -Math.PI/2 ){
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("lat " + latitude + " and lon " + longitude);
         }
         this.longitude = longitude;
         this.latitude = latitude;
