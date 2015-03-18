@@ -2,6 +2,7 @@ package ch.epfl.imhof.osm;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -11,16 +12,16 @@ public final class OSMMap {
     private List<OSMRelation> relations;
 
     public OSMMap(Collection<OSMWay> ways, Collection<OSMRelation> relations) {
-        this.ways = new ArrayList <OSMWay> (ways);
-        this.relations = new ArrayList <OSMRelation> (relations);
+        this.ways = Collections.unmodifiableList(new ArrayList <OSMWay> (ways));
+        this.relations = Collections.unmodifiableList(new ArrayList <OSMRelation> (relations));
     }
     
     public List<OSMWay> ways(){
-        return new ArrayList<OSMWay> (ways); 
+        return ways; 
     }
     
     public List<OSMRelation> relations(){
-        return new ArrayList<OSMRelation> (relations);
+        return relations;
     }
     
     public static final class Builder{ 
