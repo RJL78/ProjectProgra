@@ -1,4 +1,4 @@
-package ch.epfl.imhof.projection;
+package ch.epfl.imhof;
 
 import static org.junit.Assert.*;
 
@@ -23,8 +23,8 @@ public class GraphTest {
     private static Graph<OSMNode> testGraph;
     
     static{ 
-        b1 = new OSMNode.Builder(1,new PointGeo(1,1)); 
-        b2 = new OSMNode.Builder(2,new PointGeo(2,2));
+        b1 = new OSMNode.Builder(1,new PointGeo(0,0)); 
+        b2 = new OSMNode.Builder(2,new PointGeo(0,0));
         b1.setAttribute("String1.1","String1.2");
         b1.setAttribute("String1.3","String1.4");
         b2.setAttribute("String2.1","String2.2");

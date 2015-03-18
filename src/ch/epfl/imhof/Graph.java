@@ -34,19 +34,13 @@ public final class Graph<N> {
         }
         
         public void addNode(N n){
-            map.putIfAbsent(n, null);
+            map.putIfAbsent(n, new HashSet<N>());
         }
         
         public void addEdge(N n1, N n2) throws IllegalArgumentException{
             if(map.containsKey (n1)&& map.containsKey(n2)){
-                Set<N> n1Neighbors = map.get(n1);
-                n1Neighbors.add(n2);
-                Set<N> n2Neighbors = map.get(n2);
-                n2Neighbors.add(n1);
-                map.put(n1, n1Neighbors);
-                map.put(n2, n2Neighbors);
-                //map.get(n1).add(n2);
-                //map.get(n2).add(n1);
+                map.get(n1).add(n2);
+                map.get(n2).add(n1);
             }
             else{
                 throw new IllegalArgumentException();
