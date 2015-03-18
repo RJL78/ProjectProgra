@@ -10,12 +10,12 @@ public class PointGeoTest {
         new PointGeo(5.986310, 0);
     }
 
-    @Test (expected = IllegalArgumentException.class)
+   @Test (expected = IllegalArgumentException.class)
     public void constructorFailsOnInvalidLatitude() {
         new PointGeo(0, 1.962314);
     }
 
-    @Test
+   @Test
     public void longitudeGetterReturnsLongitude() {
         for (double l = -Math.PI; l <= Math.PI; l += Math.PI / 6.0)
             assertEquals(l, new PointGeo(l, 0).longitude(), 0);
