@@ -57,7 +57,7 @@ public class GraphTest {
     
     @Test
     public void neighborsOfImmuable() {
-        Set<OSMNode> set = testGraph.nodes();
+        Set<OSMNode> set = testGraph.neighborsOf(n1);
         set.clear();
         assertTrue(testGraph.neighborsOf(n1).contains(n2));
     }

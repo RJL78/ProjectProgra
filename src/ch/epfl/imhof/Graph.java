@@ -22,7 +22,7 @@ public final class Graph<N> {
         if (map.containsKey(node)==false){
             throw new IllegalArgumentException();
         }
-        return map.get(node);
+        return Collections.unmodifiableSet(map.get(node));
     }
     
     public static final class Builder<N>{
