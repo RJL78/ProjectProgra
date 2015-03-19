@@ -19,6 +19,7 @@ public final class OSMMapReader {
     private static OSMMap.Builder mapBuilder;
     private static OSMEntity.Builder entityBuilder;
 
+    
     private OSMMapReader(){
     }
     
