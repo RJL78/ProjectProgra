@@ -17,8 +17,8 @@ public final class OSMMapReader {
 
 
     private static OSMMap.Builder mapBuilder;
-    private static OSMEntity.Builder entityBuilder;    
-    
+    private static OSMEntity.Builder entityBuilder;
+
     private OSMMapReader(){
     }
     
@@ -39,7 +39,7 @@ public final class OSMMapReader {
                public void startElement(String uri,String lName, String qName, Attributes atts)throws SAXException{
                    switch(qName) {
                         case "node": 
-                            PointGeo location = new PointGeo( Double.parseDouble(atts.getValue("lon")), Double.parseDouble(atts.getValue("lat")));
+                            PointGeo location = new PointGeo( Math.toRadians(Double.parseDouble(atts.getValue("lon"))), Math.toRadians(Double.parseDouble(atts.getValue("lat"))));
                             entityBuilder = new OSMNode.Builder (Long.parseLong(atts.getValue("id")), location );
                             break;
                         case "way":
@@ -60,24 +60,24 @@ public final class OSMMapReader {
                         case "member":
                             OSMRelation.Member.Type type;
                             OSMEntity member;
-                            switch(atts.getValue("type")){
-                                case "node":
-                                    member = mapBuilder.nodeForId(Long.parseLong(atts.getValue("id")));
-                                    type = OSMRelation.Member.Type.NODE;
-                                    break;
-                                case "way":
-                                    member = mapBuilder.wayForId(Long.parseLong(atts.getValue("id")));
-                                    type = OSMRelation.Member.Type.WAY;
-                                    break;
-                                case "relation":
-                                    member = mapBuilder.relationForId(Long.parseLong(atts.getValue("id")));
-                                    type = OSMRelation.Member.Type.RELATION;
-                                    break;
-                                default :
-                                    type = null;
-                                    member = null;
-                                    break;
-                            }
+                                switch(atts.getValue("type")){
+                                    case "node":
+                                       member = mapBuilder.nodeForId(Long.parseLong(atts.getValue("ref")));
+                                       type = OSMRelation.Member.Type.NODE;
+                                       break;
+                                    case "way":
+                                       member = mapBuilder.wayForId(Long.parseLong(atts.getValue("ref")));
+                                       type = OSMRelation.Member.Type.WAY;                          
+                                       break;
+                                   case "relation":
+                                       member = mapBuilder.relationForId(Long.parseLong(atts.getValue("ref")));
+                                       type = OSMRelation.Member.Type.RELATION;
+                                       break;
+                                   default :
+                                       type = null;
+                                       member = null;
+                                       break;
+                               }                           
                             if (member==null){
                                 entityBuilder.setIncomplete();
                             }
@@ -85,17 +85,14 @@ public final class OSMMapReader {
                                 ((OSMRelation.Builder)entityBuilder).addMember(type, atts.getValue("role"), member);
                             } 
                             default : break;
-                   }
+                   }   
                }
             
-               public void endElement (String uri,String lName, String qName){
-                   if(!entityBuilder.isIncomplete()){    
+               public void endElement (String uri,String lName, String qName){ 
+                  try {
                        switch(qName){
-                           case "way":      
-                               try {
-                                   mapBuilder.addWay(((OSMWay.Builder)entityBuilder).build());
-                               }
-                               catch (IllegalArgumentException e) {}
+                           case "way":
+                               mapBuilder.addWay(((OSMWay.Builder)entityBuilder).build());
                                break; 
                            case "relation":                             
                                mapBuilder.addRelation(((OSMRelation.Builder)entityBuilder).build());
@@ -104,8 +101,10 @@ public final class OSMMapReader {
                                mapBuilder.addNode(((OSMNode.Builder)entityBuilder).build());
                            default : break;
                        }                        
-                   }
-               }
+                  }
+                  catch (IllegalArgumentException | IllegalStateException e ){}
+              }
+               
       });
       r.parse(new InputSource(i));
       i.close();
