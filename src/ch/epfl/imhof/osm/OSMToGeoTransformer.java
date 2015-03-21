@@ -1,10 +1,19 @@
 package ch.epfl.imhof.osm;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map.Entry;
+import java.util.TreeMap;
 
+import ch.epfl.imhof.Attributed;
+import ch.epfl.imhof.Attributes;
+import ch.epfl.imhof.Graph;
 import ch.epfl.imhof.Map;
 import ch.epfl.imhof.geometry.ClosedPolyLine;
+import ch.epfl.imhof.geometry.Point;
+import ch.epfl.imhof.geometry.Polygon;
 import ch.epfl.imhof.projection.Projection;
 
 public final class OSMToGeoTransformer {
@@ -21,25 +30,92 @@ public final class OSMToGeoTransformer {
         return null;
     }
     
+    
     private List<ClosedPolyLine> ringsForRole(OSMRelation relation, String role){
-        List<OSMWay> outerWays = new ArrayList<OSMWay>();
-        List<OSMWay> innerWays = new ArrayList<OSMWay>();
+
+        Graph.Builder<Point> graphBuilder = new Graph.Builder<Point>(); 
+        HashSet<Point> visitedPoints = new HashSet<Point> ();
+        
         for (OSMRelation.Member aMember: relation.members()){
-            if (aMember.type()==OSMRelation.Member.Type.WAY){
-                switch(aMember.role()){
-                    case "outer":
-                        outerWays.add((OSMWay)aMember.member());
-                        break;
-                    case "inner":
-                        innerWays.add((OSMWay)aMember.member());
-                        break;
-                    default:
-                        return null;
+            if (aMember.type()==OSMRelation.Member.Type.WAY && aMember.role()==role){
+                Point prevNode = null;
+                for (OSMNode node: ((OSMWay)aMember.member()).nodes()){                  
+                    Point currNode = projection.project(node.position());
+                    graphBuilder.addNode(currNode);
+                    if (prevNode != null){
+                        graphBuilder.addEdge(currNode, prevNode); 
+                    }
+                    prevNode = currNode; 
                 }
-                
-            }
+             }                         
         }
-        return null; 
+        Graph<Point> graph = graphBuilder.build();
+        List<ClosedPolyLine> lineList = new ArrayList<ClosedPolyLine>();
+
+        
+        for (Point aPoint: graph.nodes()){
+            if(graph.neighborsOf(aPoint).size()!=2){
+                return new ArrayList<ClosedPolyLine>();
+            }
+            if(visitedPoints.contains(aPoint)==false){
+                List<Point> currentLine = new ArrayList<Point>(); 
+                Point currentPoint = aPoint;
+                boolean endRing = false;
+                while (endRing == false){
+                    currentLine.add(currentPoint);
+                    visitedPoints.add(currentPoint);
+                    endRing = true;
+                    for (Point neighbor: graph.neighborsOf(currentPoint)){
+                        if (visitedPoints.contains(neighbor)==false){
+                            endRing = false;
+                            currentPoint = neighbor;
+                        }
+                    }                  
+                }
+                lineList.add(new ClosedPolyLine(currentLine));    
+           }
+       }
+       return lineList;
+    }
+    
+    private List<Attributed<Polygon>> assemblePolygon(OSMRelation relation, Attributes attributes){
+        
+        List<Attributed<Polygon>> polygonList = new ArrayList<Attributed<Polygon>>();
+        HashMap<ClosedPolyLine,List<ClosedPolyLine>> ringMap = new HashMap <ClosedPolyLine,List<ClosedPolyLine>>();
+        List<ClosedPolyLine> outerLines = this.ringsForRole(relation, "outer");
+        List<ClosedPolyLine> innerLines = this.ringsForRole(relation, "inner"); 
+        
+        for (ClosedPolyLine outerLine: outerLines){
+            ringMap.put(outerLine, new ArrayList<ClosedPolyLine>()); 
+        }
+        
+        for (ClosedPolyLine innerLine: innerLines){
+            TreeMap<Double,ClosedPolyLine> containing = new TreeMap <Double,ClosedPolyLine>();
+            for (ClosedPolyLine outerLine: outerLines){
+                boolean contains = true; 
+                for (Point aPoint: innerLine.points()){
+                    if (outerLine.containsPoint(aPoint)==false){
+                        contains = false;
+                    }
+                }
+                if(contains){
+                    containing.put(innerLine.area(), innerLine);
+                }
+            }
+            ringMap.get(containing.lastEntry().getValue()).add(innerLine);
+        }
+        
+        for (Entry<ClosedPolyLine, List<ClosedPolyLine>> entry: ringMap.entrySet()){
+            Polygon polygon;
+            if(entry.getValue().size()==0){
+                polygon = new Polygon(entry.getKey());
+            }
+            else{
+                polygon = new Polygon(entry.getKey(),entry.getValue());
+            }
+            polygonList.add(new Attributed<Polygon>(polygon,attributes));
+        }        
+        return polygonList;
     }
     
 
