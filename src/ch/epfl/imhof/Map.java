@@ -32,6 +32,7 @@ public final class Map {
         
         public Builder(){
             polyLines = new ArrayList<Attributed<PolyLine>> ();
+            polygons = new ArrayList<Attributed<Polygon>>();
         }
         
         public void addPolyLine(Attributed<PolyLine> newPolyLine){

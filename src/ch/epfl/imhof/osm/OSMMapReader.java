@@ -13,6 +13,15 @@ import org.xml.sax.helpers.XMLReaderFactory;
 
 import ch.epfl.imhof.PointGeo;
 
+
+/**
+ *  Classe immuable et non instanciable permettant de de construire une carte 
+ *  OpenStreetMap à partir de données stockées dans un fichier au format OSM
+ *  
+ * @author Raphael Laporte (251209) / Romain Leteurtre (238162)
+ *
+ */
+
 public final class OSMMapReader {
 
 
@@ -23,6 +32,17 @@ public final class OSMMapReader {
     private OSMMapReader(){
     }
     
+    /**
+     * méthode qui lit la carte OSM contenue dans le fichier de nom donné, en le décompressant 
+     * avec gzip si et seulement si le second argument est vrai.
+     * 
+     * @param fileName : nom du fichier à lire
+     * @param unGiz : boolean comfirmant si le fichier est un GZip file ou pas
+     * @return la carte OSMMap construite à partir du fichier
+     * @throws SAXException : en cas d'erreur dans le format du fichier XML contenant la carte
+     * @throws IOException : en cas d'autre erreur d'entrée/sortie
+     */
+    
     public static OSMMap readOSMFile (String fileName, boolean unGZip) throws IOException, SAXException {
         
         mapBuilder = new OSMMap.Builder(); 
@@ -32,10 +52,7 @@ public final class OSMMapReader {
         }
         XMLReader r = XMLReaderFactory.createXMLReader();
         r.setContentHandler(new DefaultHandler() {
-            
-                // que faire si une relation en inclut une autre, mais que le xml parser n'est pas encore passe par la relation fils?
-                // exceptions a tester - que se passe-t-il si un element ne possede pas toutes les informations donnes?
-            
+                        
             
                public void startElement(String uri,String lName, String qName, Attributes atts)throws SAXException{
                    switch(qName) {

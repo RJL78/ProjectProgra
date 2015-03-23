@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.TreeMap;
 
 import ch.epfl.imhof.Attributed;
@@ -34,7 +35,7 @@ public final class OSMToGeoTransformer {
     private List<ClosedPolyLine> ringsForRole(OSMRelation relation, String role){
 
         Graph.Builder<Point> graphBuilder = new Graph.Builder<Point>(); 
-        HashSet<Point> visitedPoints = new HashSet<Point> ();
+        Set<Point> visitedPoints = new HashSet<Point> ();
         
         for (OSMRelation.Member aMember: relation.members()){
             if (aMember.type()==OSMRelation.Member.Type.WAY && aMember.role()==role){
@@ -45,21 +46,22 @@ public final class OSMToGeoTransformer {
                     if (prevNode != null){
                         graphBuilder.addEdge(currNode, prevNode); 
                     }
-                    prevNode = currNode; 
+                    prevNode = currNode;
                 }
              }                         
         }
         Graph<Point> graph = graphBuilder.build();
         List<ClosedPolyLine> lineList = new ArrayList<ClosedPolyLine>();
-
+        List<Point> currentLine;
+        Point currentPoint;
         
         for (Point aPoint: graph.nodes()){
             if(graph.neighborsOf(aPoint).size()!=2){
                 return new ArrayList<ClosedPolyLine>();
             }
             if(visitedPoints.contains(aPoint)==false){
-                List<Point> currentLine = new ArrayList<Point>(); 
-                Point currentPoint = aPoint;
+                currentLine = new ArrayList<Point>(); 
+                currentPoint = aPoint;
                 boolean endRing = false;
                 while (endRing == false){
                     currentLine.add(currentPoint);
@@ -99,10 +101,12 @@ public final class OSMToGeoTransformer {
                     }
                 }
                 if(contains){
-                    containing.put(innerLine.area(), innerLine);
+                    containing.put(innerLine.area(), innerLine); // you mean outerline right ?
+                    // since you're adding all the outers that contains that inner
                 }
             }
-            ringMap.get(containing.lastEntry().getValue()).add(innerLine);
+            ringMap.get(containing.lastEntry().getValue()).add(innerLine); // if outers without inners ?
+            // and why choose the biggest one ? isn't it the smallest one we have to choose? thus firstentry?
         }
         
         for (Entry<ClosedPolyLine, List<ClosedPolyLine>> entry: ringMap.entrySet()){
