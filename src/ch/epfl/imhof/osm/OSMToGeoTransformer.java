@@ -1,19 +1,22 @@
 package ch.epfl.imhof.osm;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
-import java.util.TreeMap;
 
 import ch.epfl.imhof.Attributed;
 import ch.epfl.imhof.Attributes;
 import ch.epfl.imhof.Graph;
 import ch.epfl.imhof.Map;
 import ch.epfl.imhof.geometry.ClosedPolyLine;
+import ch.epfl.imhof.geometry.OpenPolyLine;
 import ch.epfl.imhof.geometry.Point;
+import ch.epfl.imhof.geometry.PolyLine;
 import ch.epfl.imhof.geometry.Polygon;
 import ch.epfl.imhof.projection.Projection;
 
@@ -27,8 +30,51 @@ public final class OSMToGeoTransformer {
     
     public Map transform(OSMMap map){
         
+        List<Attributed<PolyLine>> polylines = new ArrayList<>();
+        List<Attributed<Polygon>> polygones = new ArrayList<>();
         
-        return null;
+        
+        for (OSMWay way : map.ways()) {
+            List<Point> points = new ArrayList<>();
+            for (OSMNode node :way.nodes()) {
+                Point newPoint = projection.project(node.position());
+                points.add(newPoint);
+            }
+            if (way.isClosed()) {
+                if (isSurface(way)) {
+                    polygones.add(new Attributed<Polygon>(new Polygon(new ClosedPolyLine(points),new ArrayList<ClosedPolyLine>()) ,way.attributes()));
+                }
+                else {
+                    polylines.add(new Attributed<PolyLine>(new ClosedPolyLine(points),way.attributes()));
+                }
+            }
+            else {
+                polylines.add(new Attributed<PolyLine>(new OpenPolyLine(points),way.attributes()));
+            }
+        }
+        
+        for (OSMRelation relation : map.relations()) {
+            polygones.addAll(assemblePolygon(relation,relation.attributes()));
+        }
+        
+        
+        return new Map(polylines,polygones);
+    }
+    
+    private boolean isSurface(OSMWay way) {
+        if (way.hasAttribute("area")) {
+                List<String> possibilities1 = new ArrayList<>(Arrays.asList("yes","1","true"));
+                return (possibilities1.contains(way.attributeValue("area")));
+            }
+        List<String> possibilities2 = new ArrayList<>(Arrays.asList("aeroway", "amenity", "building", "harbour", "historic",
+                "landuse", "leisure", "man_made", "military", "natural",
+                "office", "place", "power", "public_transport", "shop",
+                "sport", "tourism", "water", "waterway", "wetland"));
+        for (String s : possibilities2) {
+            if (way.hasAttribute(s)) return true;
+        }
+        return false;
+        
     }
     
     
@@ -62,17 +108,15 @@ public final class OSMToGeoTransformer {
             if(visitedPoints.contains(aPoint)==false){
                 currentLine = new ArrayList<Point>(); 
                 currentPoint = aPoint;
-                boolean endRing = false;
-                while (endRing == false){
+                boolean endRing =false;
+                while (endRing==false){
                     currentLine.add(currentPoint);
                     visitedPoints.add(currentPoint);
-                    endRing = true;
-                    for (Point neighbor: graph.neighborsOf(currentPoint)){
-                        if (visitedPoints.contains(neighbor)==false){
-                            endRing = false;
-                            currentPoint = neighbor;
-                        }
-                    }                  
+                    List<Point> unvisitedNeighbors = new ArrayList<>(graph.neighborsOf(aPoint));
+                    unvisitedNeighbors.removeIf(x -> visitedPoints.contains(x));
+                    if (unvisitedNeighbors.size()==0) endRing=true;
+                    else currentPoint=unvisitedNeighbors.get(0);
+                               
                 }
                 lineList.add(new ClosedPolyLine(currentLine));    
            }
@@ -90,23 +134,16 @@ public final class OSMToGeoTransformer {
         for (ClosedPolyLine outerLine: outerLines){
             ringMap.put(outerLine, new ArrayList<ClosedPolyLine>()); 
         }
+        Collections.sort(outerLines, (p1, p2) -> ((Double)p1.area()).compareTo((Double)p2.area()));
+        
         
         for (ClosedPolyLine innerLine: innerLines){
-            TreeMap<Double,ClosedPolyLine> containing = new TreeMap <Double,ClosedPolyLine>();
-            for (ClosedPolyLine outerLine: outerLines){
-                boolean contains = true; 
-                for (Point aPoint: innerLine.points()){
-                    if (outerLine.containsPoint(aPoint)==false){
-                        contains = false;
-                    }
-                }
-                if(contains){
-                    containing.put(innerLine.area(), innerLine); // you mean outerline right ?
-                    // since you're adding all the outers that contains that inner
-                }
+            Point pointToTest = innerLine.firstPoint();
+            int index=0;
+            while (index<outerLines.size()&&!outerLines.get(index).containsPoint(pointToTest)) index++;
+            if (index<outerLines.size()) {
+                ringMap.get(outerLines.get(index)).add(innerLine);
             }
-            ringMap.get(containing.lastEntry().getValue()).add(innerLine); // if outers without inners ?
-            // and why choose the biggest one ? isn't it the smallest one we have to choose? thus firstentry?
         }
         
         for (Entry<ClosedPolyLine, List<ClosedPolyLine>> entry: ringMap.entrySet()){
