@@ -32,6 +32,7 @@ public final class OSMToGeoTransformer {
         
         List<Attributed<PolyLine>> polylines = new ArrayList<>();
         List<Attributed<Polygon>> polygones = new ArrayList<>();
+        List<OSMRelation> multiPolygons = new ArrayList<>();
         
         
         for (OSMWay way : map.ways()) {
@@ -53,7 +54,9 @@ public final class OSMToGeoTransformer {
             }
         }
         
-        for (OSMRelation relation : map.relations()) {
+        
+        multiPolygons.removeIf(relation -> relation.attributeValue("type")!="multipolygon");
+        for (OSMRelation relation : multiPolygons) {
             polygones.addAll(assemblePolygon(relation,relation.attributes()));
         }
         
@@ -115,8 +118,7 @@ public final class OSMToGeoTransformer {
                     List<Point> unvisitedNeighbors = new ArrayList<>(graph.neighborsOf(aPoint));
                     unvisitedNeighbors.removeIf(x -> visitedPoints.contains(x));
                     if (unvisitedNeighbors.size()==0) endRing=true;
-                    else currentPoint=unvisitedNeighbors.get(0);
-                               
+                    else currentPoint=unvisitedNeighbors.get(0);                           
                 }
                 lineList.add(new ClosedPolyLine(currentLine));    
            }
