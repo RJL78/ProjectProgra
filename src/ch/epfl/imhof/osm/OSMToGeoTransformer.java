@@ -20,14 +20,32 @@ import ch.epfl.imhof.geometry.PolyLine;
 import ch.epfl.imhof.geometry.Polygon;
 import ch.epfl.imhof.projection.Projection;
 
+/**
+ *  classe finale et immuable représentant un convertisseur de données OSM en carte 
+ *  
+ * @author Raphael Laporte (251209) / Romain Leteurtre (238162)
+ *
+ */
+
 public final class OSMToGeoTransformer {
     
     Projection projection;
 
+    /**
+     * Constructeur 
+     * @param projection : projection utilisée pour la conversion
+     */
+    
     public OSMToGeoTransformer(Projection projection) {
         this.projection = projection;
     }
     
+    /**
+     * Convertit une carteOSM en une carte géométrique projetée
+     * 
+     * @param map : carteOSM à convertir
+     * @return une carte (Map) convertie selon la projection utilisée
+     */
     public Map transform(OSMMap map){
         
         List<Attributed<PolyLine>> polylines = new ArrayList<>();
