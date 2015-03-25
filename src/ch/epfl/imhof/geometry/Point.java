@@ -1,5 +1,7 @@
 package ch.epfl.imhof.geometry;
 
+import java.util.Objects;
+
 /** 
  * Classe modelisant un point dans le repere CH1903
  * 
@@ -41,5 +43,14 @@ public final class Point {
     public double y(){
         return y; 
     }
+    
+    public boolean equals(Object o){
+        return ((o.getClass()==this.getClass())? (((Point)o).y()==y && ((Point)o).x()==x ) : false);
+    }
+    
+    public int hashCode(){
+        return Objects.hash(x,y);
+    }
+    
 
 }

@@ -18,17 +18,17 @@ public class MapTest {
     static{
         transformer = new OSMToGeoTransformer(new CH1903Projection());
 
-        try {
+       try {
             map = transformer.transform(OSMMapReader.readOSMFile("/Users/raphael/Sites/ProjectSemester2/src/ch/epfl/imhof/osm/testFile1.osm", false));
         } catch (IOException | SAXException e) {
             e.printStackTrace();
             map = null;
-        }
+        } 
     }
 
     public MapTest() {
     }
-    
+   
     @Test (expected = UnsupportedOperationException.class )
     public void immuabilityTest1() throws IOException, SAXException{
         map.polygons().clear();
@@ -52,5 +52,15 @@ public class MapTest {
     public void longRun() throws IOException, SAXException{
         map = transformer.transform(OSMMapReader.readOSMFile("/Users/raphael/Sites/ProjectSemester2/src/ch/epfl/imhof/osm/berne.osm.gz", true));
     }
+
+
+    @Test
+    public void LCTest() throws IOException, SAXException{
+        Map map1 = transformer.transform(OSMMapReader.readOSMFile("/Users/raphael/Sites/ProjectSemester2/src/ch/epfl/imhof/osm/lc2.osm", false));
+        assert(map1.polygons().size()==1);
+        assert(map1.polyLines().size()==49);
+        assert(map1.polygons().get(0).value().holes().size()==14);
+    }
+    
 
 }

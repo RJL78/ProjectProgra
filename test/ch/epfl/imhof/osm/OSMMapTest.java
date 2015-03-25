@@ -61,5 +61,6 @@ public class OSMMapTest {
         assertTrue(builder.nodeForId(20).equals(n1));
         assertTrue(builder.wayForId(10).equals(w1));
         assertTrue(builder.relationForId(30).equals(r1));
-    }  
+    }
+    
 }

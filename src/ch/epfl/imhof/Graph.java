@@ -77,7 +77,9 @@ public final class Graph<N> {
          */
         
         public void addNode(N n){
-            map.putIfAbsent(n, new HashSet<N>());
+            if (!map.keySet().contains(n)){
+                map.put(n, new HashSet<N>());
+            }
         }
         
         /**

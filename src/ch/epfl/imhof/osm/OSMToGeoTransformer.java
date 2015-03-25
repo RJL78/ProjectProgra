@@ -32,7 +32,7 @@ public final class OSMToGeoTransformer {
         
         List<Attributed<PolyLine>> polylines = new ArrayList<>();
         List<Attributed<Polygon>> polygones = new ArrayList<>();
-        List<OSMRelation> multiPolygons = new ArrayList<>();
+        List<OSMRelation> multiPolygons = new ArrayList<>(map.relations());
         
         
         for (OSMWay way : map.ways()) {
@@ -53,11 +53,10 @@ public final class OSMToGeoTransformer {
                 polylines.add(new Attributed<PolyLine>(new OpenPolyLine(points),way.attributes()));
             }
         }
-        
-        
-        multiPolygons.removeIf(relation -> relation.attributeValue("type")!="multipolygon");
+        multiPolygons.removeIf(relation -> !relation.hasAttribute("type"));
+        multiPolygons.removeIf(relation -> !relation.attributeValue("type").equals("multipolygon"));
         for (OSMRelation relation : multiPolygons) {
-            polygones.addAll(assemblePolygon(relation,relation.attributes()));
+            polygones.addAll(this.assemblePolygon(relation,relation.attributes()));
         }
         
         
@@ -87,7 +86,7 @@ public final class OSMToGeoTransformer {
         Set<Point> visitedPoints = new HashSet<Point> ();
         
         for (OSMRelation.Member aMember: relation.members()){
-            if (aMember.type()==OSMRelation.Member.Type.WAY && aMember.role()==role){
+            if (aMember.type().equals(OSMRelation.Member.Type.WAY) && aMember.role().equals(role)){
                 Point prevNode = null;
                 for (OSMNode node: ((OSMWay)aMember.member()).nodes()){                  
                     Point currNode = projection.project(node.position());
@@ -99,14 +98,15 @@ public final class OSMToGeoTransformer {
                 }
              }                         
         }
+        
         Graph<Point> graph = graphBuilder.build();
+        
         List<ClosedPolyLine> lineList = new ArrayList<ClosedPolyLine>();
         List<Point> currentLine;
         Point currentPoint;
-        
         for (Point aPoint: graph.nodes()){
             if(graph.neighborsOf(aPoint).size()!=2){
-                return new ArrayList<ClosedPolyLine>();
+                return new ArrayList<ClosedPolyLine>();               
             }
             if(visitedPoints.contains(aPoint)==false){
                 currentLine = new ArrayList<Point>(); 
@@ -115,7 +115,7 @@ public final class OSMToGeoTransformer {
                 while (endRing==false){
                     currentLine.add(currentPoint);
                     visitedPoints.add(currentPoint);
-                    List<Point> unvisitedNeighbors = new ArrayList<>(graph.neighborsOf(aPoint));
+                    List<Point> unvisitedNeighbors = new ArrayList<>(graph.neighborsOf(currentPoint));
                     unvisitedNeighbors.removeIf(x -> visitedPoints.contains(x));
                     if (unvisitedNeighbors.size()==0) endRing=true;
                     else currentPoint=unvisitedNeighbors.get(0);                           
