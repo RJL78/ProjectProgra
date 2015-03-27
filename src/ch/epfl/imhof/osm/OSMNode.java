@@ -2,6 +2,7 @@ package ch.epfl.imhof.osm;
 
 import ch.epfl.imhof.Attributes;
 import ch.epfl.imhof.PointGeo;
+import ch.epfl.imhof.geometry.Point;
 
 
 /**
@@ -35,6 +36,10 @@ public final class OSMNode extends OSMEntity {
     
     public PointGeo position() {
         return position;
+    }
+    
+    public boolean equals (Object o){
+        return ((o.getClass()==this.getClass())? (((OSMNode)o).position().equals(this.position())): false);
     }
     
     /**

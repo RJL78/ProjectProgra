@@ -51,47 +51,64 @@ public final class OSMToGeoTransformer {
         List<Attributed<PolyLine>> polylines = new ArrayList<>();
         List<Attributed<Polygon>> polygones = new ArrayList<>();
         List<OSMRelation> multiPolygons = new ArrayList<>(map.relations());
-        
+        Set<String> keysToKeepLine = new HashSet<>(Arrays.asList("bridge", "highway", "layer", "man_made", "railway", "tunnel", "waterway"));
+        Set<String> keysToKeepGon = new HashSet<>(Arrays.asList("building", "landuse", "layer", "leisure", "natural","waterway"));
+        Set<String> keys = new HashSet<>(Arrays.asList("building", "landuse", "layer", "leisure", "natural","waterway","bridge", "highway", "man_made", "railway", "tunnel"));        
         
         for (OSMWay way : map.ways()) {
-            List<Point> points = new ArrayList<>();
-            for (OSMNode node :way.nodes()) {
-                Point newPoint = projection.project(node.position());
-                points.add(newPoint);
-            }
-            if (way.isClosed()) {
-                if (isSurface(way)) {
-                    polygones.add(new Attributed<Polygon>(new Polygon(new ClosedPolyLine(points),new ArrayList<ClosedPolyLine>()) ,way.attributes()));
+                List<Point> points = new ArrayList<>();
+                for (OSMNode node : way.nodes()) {
+                    Point newPoint = projection.project(node.position());
+                    points.add(newPoint);
                 }
-                else {
-                    polylines.add(new Attributed<PolyLine>(new ClosedPolyLine(points),way.attributes()));
+                if (way.isClosed()) {
+                    points.remove(points.size()-1);
+                    if (isSurface(way) && shouldKeep(keysToKeepGon, way)) {
+                        polygones.add(new Attributed<Polygon>(new Polygon(new ClosedPolyLine(points),new ArrayList<ClosedPolyLine>()) ,way.attributes().keepOnlyKeys(keysToKeepGon)));
+                    }
+                    else if (shouldKeep(keysToKeepLine, way)&& !isSurface(way)){
+                        polylines.add(new Attributed<PolyLine>(new ClosedPolyLine(points),way.attributes().keepOnlyKeys(keysToKeepLine)));
+                    }
                 }
-            }
-            else {
-                polylines.add(new Attributed<PolyLine>(new OpenPolyLine(points),way.attributes()));
-            }
+                else if (shouldKeep(keysToKeepLine, way)) {
+                    polylines.add(new Attributed<PolyLine>(new OpenPolyLine(points),way.attributes().keepOnlyKeys(keysToKeepLine)));
+                }
         }
+        
         multiPolygons.removeIf(relation -> !relation.hasAttribute("type"));
         multiPolygons.removeIf(relation -> !relation.attributeValue("type").equals("multipolygon"));
         for (OSMRelation relation : multiPolygons) {
-            polygones.addAll(this.assemblePolygon(relation,relation.attributes()));
+            
+            if (shouldKeep(keysToKeepGon, relation)){
+                polygones.addAll(this.assemblePolygon(relation,relation.attributes().keepOnlyKeys(keysToKeepGon)));
+            }
         }
-        
-        
         return new Map(polylines,polygones);
     }
     
-    private boolean isSurface(OSMWay way) {
-        if (way.hasAttribute("area")) {
-                List<String> possibilities1 = new ArrayList<>(Arrays.asList("yes","1","true"));
-                return (possibilities1.contains(way.attributeValue("area")));
+    private boolean shouldKeep(Set<String> keysToKeep, OSMEntity ent){
+        for (String key: keysToKeep){
+            if(ent.hasAttribute(key)){
+                return true;
             }
-        List<String> possibilities2 = new ArrayList<>(Arrays.asList("aeroway", "amenity", "building", "harbour", "historic",
-                "landuse", "leisure", "man_made", "military", "natural",
-                "office", "place", "power", "public_transport", "shop",
-                "sport", "tourism", "water", "waterway", "wetland"));
+        }
+        return false; 
+    }
+    
+    private boolean isSurface(OSMWay way) {
+        String[] possibilities1 = {"yes","1","true"};
+        String[] possibilities2 = {"aeroway", "amenity", "building", "harbour", "historic","landuse", "leisure", "man_made", "military", "natural","office", "place", "power", "public_transport", "shop","sport", "tourism", "water", "waterway", "wetland"};
+        if (way.hasAttribute("area")){
+            for (int i=0; i<3; i++){
+                if (way.attributeValue("area").equals(possibilities1[i])){
+                    return true;
+                }
+            }
+        }
         for (String s : possibilities2) {
-            if (way.hasAttribute(s)) return true;
+            if (way.hasAttribute(s)){
+                return true;
+            }
         }
         return false;
         

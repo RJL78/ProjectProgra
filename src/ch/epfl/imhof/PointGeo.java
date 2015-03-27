@@ -1,5 +1,7 @@
 package ch.epfl.imhof;
 
+import ch.epfl.imhof.geometry.Point;
+
 /** 
  * Classe modelisant un point dans le repere WGS84
  * 
@@ -44,6 +46,10 @@ public final class PointGeo {
     
     public double latitude(){
         return latitude;
+    }
+    
+    public boolean equals(Object o){
+        return ((o.getClass()==this.getClass())? (((PointGeo)o).longitude()==longitude && ((PointGeo)o).latitude()==latitude ) : false);
     }
 
 }

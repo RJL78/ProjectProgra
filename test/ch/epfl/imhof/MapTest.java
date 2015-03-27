@@ -5,6 +5,7 @@ import java.io.IOException;
 import org.junit.Test;
 import org.xml.sax.SAXException;
 
+import ch.epfl.imhof.geometry.PolyLine;
 import ch.epfl.imhof.osm.OSMMap;
 import ch.epfl.imhof.osm.OSMMapReader;
 import ch.epfl.imhof.osm.OSMToGeoTransformer;
@@ -50,7 +51,18 @@ public class MapTest {
     
     @Test
     public void longRun() throws IOException, SAXException{
+        System.out.println("Berne");
         map = transformer.transform(OSMMapReader.readOSMFile("/Users/raphael/Sites/ProjectSemester2/src/ch/epfl/imhof/osm/berne.osm.gz", true));
+        System.out.println("polyLines "+ map.polyLines().size());
+        System.out.println("polygons " + map.polygons().size());
+        System.out.println("Interlaken");
+        map = transformer.transform(OSMMapReader.readOSMFile("/Users/raphael/Sites/ProjectSemester2/src/ch/epfl/imhof/osm/interlaken.osm.gz", true));
+        System.out.println("polyLines "+ map.polyLines().size());
+        System.out.println("polygons " + map.polygons().size());
+        System.out.println("Lausanne");
+        map = transformer.transform(OSMMapReader.readOSMFile("/Users/raphael/Sites/ProjectSemester2/src/ch/epfl/imhof/osm/lausanne.osm.gz", true));
+        System.out.println("polyLines "+ map.polyLines().size());
+        System.out.println("polygons " + map.polygons().size());
     }
 
 
@@ -61,6 +73,9 @@ public class MapTest {
         assert(map1.polyLines().size()==49);
         assert(map1.polygons().get(0).value().holes().size()==14);
     }
+    
+    
+    
     
 
 }
