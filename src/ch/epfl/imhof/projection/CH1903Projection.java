@@ -3,22 +3,21 @@ package ch.epfl.imhof.projection;
 import ch.epfl.imhof.PointGeo;
 import ch.epfl.imhof.geometry.Point;
 
-
 /** 
- * Classe permettant la projection CH1903 d'un PointGeo dans le repere WGS84 en un Point dans le repere CH1903, et inversement.
+ * Classe permettant la projection CH1903 d'un PointGeo dans le repère WGS84
+ *  en un Point dans le repère CH1903, et inversement
+ * Implémente Projection
  * 
  * @author Raphael Laporte (251209) / Romain Leteurtre (238162)
- *
  */
-
 public final class CH1903Projection implements Projection{
     
     /**
-     *Projette un point du repere WGS84 au repere CH1903
+     *Projette un point du repère WGS84 au repère CH1903
      * 
-     * @param L'instance de PointGeo que l'on souhaite projeter. 
-     * @return La projection du parametre.
-     * 
+     * @param L'instance de PointGeo que l'on souhaite projeter
+     *  
+     * @return La projection du paramètre
      */
     public Point project(PointGeo point){
         double longi = Math.toDegrees(point.longitude());
@@ -28,12 +27,13 @@ public final class CH1903Projection implements Projection{
         return new Point ( 600072.37 + 211455.93*longi1 - 10938.51*longi1*latit1 - 0.36*longi1*Math.pow(latit1,2) - 44.54*Math.pow(longi1,3),
                 200147.07+308807.95*latit1+3745.25*Math.pow(longi1, 2)+76.63*Math.pow(latit1,2)-194.56*Math.pow(longi1,2)*latit1+119.79*Math.pow(latit1,3));
     }
+    
     /**
-     *Projette un point du repere CH1903 au repere WGS84
+     *Projette un point du repère CH1903 au repère WGS84
      * 
-     * @param L'instance de Point que l'on souhaite projeter. 
-     * @return La projection du parametre.
-     * 
+     * @param L'instance de Point que l'on souhaite projeter
+     *  
+     * @return La projection du paramètre
      */
     public PointGeo inverse(Point point){
         double x1 = (point.x() -600000)/1000000;
