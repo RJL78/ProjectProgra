@@ -16,7 +16,7 @@ import java.util.Set;
 
 public final class Graph<N> {
     
-    private Map<N,Set<N>> map;
+    private final Map<N,Set<N>> map;
     
     /**
      * Constructeur pour le Graph 
@@ -24,7 +24,10 @@ public final class Graph<N> {
      * @param neighbors: Une map qui a pour clefs les noeuds du graph, et pour valeures associes les listes des noeuds connectes correspondants 
      */
     public Graph(Map<N, Set<N>> neighbors) {
-        map = Collections.unmodifiableMap(new HashMap<N,Set<N>> (neighbors));
+        map = new HashMap<>();
+        for (Map.Entry<N,Set<N>> entry: neighbors.entrySet()){
+            map.put(entry.getKey(), new HashSet<N>(entry.getValue()));
+        }
     }
     
     /**
