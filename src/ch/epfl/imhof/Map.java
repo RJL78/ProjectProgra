@@ -14,28 +14,27 @@ import ch.epfl.imhof.geometry.Polygon;
  * @author Raphael Laporte (251209) / Romain Leteurtre (238162)
  *
  */
-
 public final class Map {
 
-   List<Attributed<PolyLine>> polyLines; 
-   List<Attributed<Polygon>> polygons;
+   private final List<Attributed<PolyLine>> polyLines; 
+   private final List<Attributed<Polygon>> polygons;
     
    /**
-    * Constructeur 
+    * Constructeur
+    * 
     * @param polyLines : liste de polylignes attribuées
-    * @param polygons :  liste de polygones attribués
+    * @param polygons : liste de polygones attribués
     */
-   
     public Map(List<Attributed<PolyLine>> polyLines, List<Attributed<Polygon>> polygons) {
-        this.polyLines = new ArrayList<Attributed<PolyLine>> (polyLines);
-        this.polygons = new ArrayList<Attributed<Polygon>> (polygons);
+        this.polyLines = new ArrayList<> (polyLines);
+        this.polygons = new ArrayList<> (polygons);
     }
     
     /**
      * Getter de polyLines 
+     * 
      * @return la liste des polylignes attribuées de la carte
      */
-    
     public List<Attributed<PolyLine>> polyLines(){
         return Collections.unmodifiableList(polyLines);
     }
@@ -43,62 +42,54 @@ public final class Map {
 
     /**
      * Getter de polygons 
+     * 
      * @return la liste des polygones attribués de la carte
-     */
-    
+     */    
     public List<Attributed<Polygon>> polygons(){
         return Collections.unmodifiableList(polygons);
     }
     
     /**
-     * 
-     * Classe imbriquée statiquement, servant a la construction d'un objet Map. 
-     *
-     */
-    
+     * Classe imbriquée statiquement,Builder servant à la construction d'un objet Map. 
+     */ 
     public static class Builder{
-        List<Attributed<PolyLine>> polyLines; 
-        List<Attributed<Polygon>> polygons; 
+        
+        private final List<Attributed<PolyLine>> polyLines; 
+        private final List<Attributed<Polygon>> polygons; 
         
         /**
          * Constructeur 
-         * 
          */
-        
         public Builder(){
-            polyLines = new ArrayList<Attributed<PolyLine>> ();
-            polygons = new ArrayList<Attributed<Polygon>>();
+            polyLines = new ArrayList<> ();
+            polygons = new ArrayList<>();
         }
         
         /**
-         *  Ajoute une polyligne à la liste des polylignes en construction
+         * Ajoute une polyligne à la liste (en construction) des polylignes à inclure dans l'objet Map 
+         * 
          * @param newPolyLine : nouvelle polyligne à ajouter à la liste
-         */
-        
+         */       
         public void addPolyLine(Attributed<PolyLine> newPolyLine){
             polyLines.add(newPolyLine);
         }
         
         /**
-         *  Ajoute une polygon à la liste des polygones en construction
+         * Ajoute une polygon à la liste (en construction) des polygones à inclure dans l'objet Map 
+         * 
          * @param newPolygon : nouveau polygone à ajouter à la liste
-         */
-        
+         */        
         public void addPolygon(Attributed<Polygon> newPolygon){
             polygons.add(newPolygon);
         }
         
         /**
-         * Sert a construire un objet Map contenant les polylignes et polygones
-         * ajoutés lors de la construction
+         * Sert à construire un objet Map contenant les polylignes et polygones ajoutés au Builder
          * 
          * @return L'objet Map avec les polylignes et polygones souhaités
-         */
-        
+         */ 
         public Map build(){
             return new Map(polyLines,polygons);
-        }
-        
+        }       
     }
-    
 }

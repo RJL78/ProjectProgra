@@ -3,15 +3,12 @@ package test.ch.epfl.imhof;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.fail;
-
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-
 import org.junit.Test;
-
 import ch.epfl.imhof.Graph;
 
 public class GraphTest {

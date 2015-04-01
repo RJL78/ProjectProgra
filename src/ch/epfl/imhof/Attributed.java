@@ -1,90 +1,92 @@
 package ch.epfl.imhof;
 
 /** 
- * Classe générique représentant une entité de type T dotée d'attributs
+ * Classe générique représentant un objet de type T doté d'attributs
+ * Englobe à la fois l'objet ainsi que ses attributs associés (wrapper class) 
+ * Classe Immuable
  * 
  * @author Raphael Laporte (251209) / Romain Leteurtre (238162)
+ * 
+ * @param <T> La classe de l'objet doté d'attributs 
  */
-
 public final class Attributed<T> {
 
-    private T inputValue;
-    private Attributes attributes; 
-    
+    private final T inputValue;
+    private final Attributes attributes; 
+
     /**
-     * Constructeur
+     * Constructeur d'une instance englobant à la fois un objet doté d'attributs et ses attributs associées
      * 
-     * @param value: entité représenté par la classe
-     * @param attributes: attributs associés à l'entité value
-     * 
-     * @return Instance représentant un Attributed
+     * @param value: objet doté d'attributs
+     * @param attributes: attributs associés au parametre value
      */
     public Attributed (T value, Attributes attributes){
         inputValue = value;
         this.attributes = attributes;
     }
+
     /**
-     * retourne l'entité représenté par la classe
+     * Getter pour l'objet englobé
      * 
-     * @return entité de type T
+     * @return l'Objet de type T englobé par l'instance sur laquelle la methode est appellé
      */
     public T value (){
         return inputValue;
     }
-    
+
     /**
-     * Retourne les attributs de l'entité
+     * Getter pour les attributs associés à l'objet englobé. 
      * 
-     * @return les attributs de l'entité
+     * @return les attributs de l'entité englobé
      */
     public Attributes attributes(){
         return attributes; 
     }
-    
+
     /**
-     * regarde si l'entité à l'attribut name
+     * Verifie si l'objet englobé est associé avec un attribut ayant pour nom le string mis en parametre
      * 
-     * @param name: attribut cherché
+     * @param name: le nom de l'attribut dont on cherche a verifier l'existance
      * 
-     * @return true si name fait partie des attributs de l'entité sinon false
+     * @return true si un attribut ayant pour nom "name" est associé à l'objet englobé, sinon false
      */
     public boolean hasAttribute(String name){ 
         return attributes.contains(name);
     }
+
     /**
-     * retourne la valeur de l'attribut attributeName
+     * Retourne la valeur de l'attribut attributeName
      * 
-     * @param attributeName: nom de l'attribut dont on cherche la valeur
+     * @param attributeName: le nom de l'attribut dont on cherche la valeur associée
      * 
-     * @return la valeur de l'attribut (String)
+     * @return la valeur de l'attribut dont le nom est mis en paramètre, null si cet attribut n'est pas associé à l'objet englobé
      */
     public String attributeValue(String attributeName){ 
         return attributes.get(attributeName); 
     }
-    
+
     /**
-     * retourne la valeur de l'attribut attributeName et une valeur default si elle n'existe pas
+     * Retourne la valeur de l'attribut ont le nom est mis en parametre, ou une valeur par default si cet attribut n'existe pas
      * 
-     * @param attributeName: nom de l'attribut dont on cherche la valeur
-     * @param defaultValue: le String par default qu'on renvoit en cas de problème
+     * @param attributeName: le nom de l'attribut dont on cherche la valeur associée
+     * @param defaultValue: le String servant de valeur par default 
      * 
-     * @return la valeur de l'attribut (String) ou la valeur pas défault en cas de problème
+     * @return la valeur de l'attribut dont le nom est mis en paramètre, defaultValue si cet attribut n'est pas associé à l'objet englobé
      */
     public String attributeValue(String attributeName, String defaultValue){ 
         return attributes.get(attributeName, defaultValue);
     }
-    
+
     /**
-     * retourne la valeur (int) de l'attribut attributeName et une valeur default si elle n'existe
+     * Retourne la valeur de l'attribut attributeName ou (defaultValue si elle n'existe
      * pas ou si la valeur n'est pas un entier
      * 
-     * @param attributeName: nom de l'attribut dont on cherche la valeur
-     * @param defaultValue: l'entier par default qu'on renvoit en cas de problème
+     * @param attributeName: nom de l'attribut dont on cherche la valeur associée
+     * @param defaultValue: l'entier servant de valeur par default
      * 
-     * @return la valeur de l'attribut (int) ou la valeur pas défault en cas de problème
+     * @return  la valeur de l'attribut dont le nom est mis en paramètre, defaultValue si cet attribut n'est pas associé à l'objet englobé
      */
     public int attributeValue(String attributeName, int defaultValue){ 
         return attributes.get(attributeName, defaultValue);
     }
-    
 }
