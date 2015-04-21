@@ -1,6 +1,7 @@
 package ch.epfl.imhof.geometry;
 
 import java.util.Objects;
+import java.util.function.Function;
 
 /** 
  * Classe immuable modélisant un point dans le repère CH1903
@@ -40,11 +41,30 @@ public final class Point {
         return y; 
     }
     
+    /**
+     * redefinition de la methode equals(): utile dans OSMToGeoTransformer pour bien identifier deux noeuds equivalents
+     * 
+     * @param o: Objet auquel on compare l'instance sur lequel la methode est appelée
+     * 
+     * @return True si les deux objets comparés sont equivalents, false sinon
+     */
     public boolean equals(Object o){
         return ((o.getClass()==this.getClass()) ? (((Point)o).y()==y && ((Point)o).x()==x ) : false);
     }
     
+    /**
+     * Redifinition de hashcode : necessaire pour verifier que deux elements egaux selon la methode equals presentent le meme hashcoe
+     */
     public int hashCode(){
         return Objects.hash(x,y);
+    }
+    // auuuuucune idee de si ca marche ou pas ! 
+    public static Function<Point,Point> alignedCoordinateChange( Point firstPoint1, Point firstPoint2, Point secondPoint1, Point secondPoint2){
+        if (firstPoint1.x() == secondPoint1.y() || firstPoint1.y() == secondPoint1.y()) throw new IllegalArgumentException();
+        return  point -> {
+            double coefX = (firstPoint2.x() - secondPoint2.x())/(firstPoint1.x() - secondPoint1.x());
+            double coefY = (firstPoint2.y() - secondPoint2.y())/(firstPoint1.y() - secondPoint1.y());
+            return new Point(point.x()*coefX+firstPoint2.x()-coefX*firstPoint1.x(),point.y()*coefY+firstPoint2.y()-coefY*firstPoint1.y());
+        };
     }
 }
