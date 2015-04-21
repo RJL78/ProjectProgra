@@ -31,8 +31,9 @@ public class Color {
     }
     
     public static Color rgb(int bits){
-        return null; 
-        // TODO 
+        return new Color(((bits >> 16) & 0xFF) / 255d,
+                        ((bits >>  8) & 0xFF) / 255d,
+                        ((bits >>  0) & 0xFF) / 255d);
     }
     
     public Color multiply(Color that){

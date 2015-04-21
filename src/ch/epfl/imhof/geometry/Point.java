@@ -60,11 +60,13 @@ public final class Point {
     }
     // auuuuucune idee de si ca marche ou pas ! 
     public static Function<Point,Point> alignedCoordinateChange( Point firstPoint1, Point firstPoint2, Point secondPoint1, Point secondPoint2){
-        if (firstPoint1.x() == secondPoint1.y() || firstPoint1.y() == secondPoint1.y()) throw new IllegalArgumentException();
+        if (firstPoint1.x() == secondPoint1.x() || firstPoint1.y() == secondPoint1.y()) throw new IllegalArgumentException();
         return  point -> {
-            double coefX = (firstPoint2.x() - secondPoint2.x())/(firstPoint1.x() - secondPoint1.x());
-            double coefY = (firstPoint2.y() - secondPoint2.y())/(firstPoint1.y() - secondPoint1.y());
-            return new Point(point.x()*coefX+firstPoint2.x()-coefX*firstPoint1.x(),point.y()*coefY+firstPoint2.y()-coefY*firstPoint1.y());
+            double a = (firstPoint2.x() - secondPoint2.x())/(firstPoint1.x() - secondPoint1.x());
+            double b = (firstPoint2.y() - secondPoint2.y())/(firstPoint1.y() - secondPoint1.y());
+            double c = firstPoint2.x()-a*firstPoint1.x();
+            double d = firstPoint2.y()-b*firstPoint1.y();
+            return new Point(point.x()*a+c,point.y()*b+d);
         };
     }
 }

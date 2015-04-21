@@ -45,11 +45,11 @@ public class LineStyle {
          return joint;
      }
      
-     public float thickness(){
+     public float getThickness(){
          return thickness; 
      }
      
-     // a voir si plus efficace possible ci-dessous
+     // a voir si plus efficace possible ci-dessous - je crois pas
      public float[] lineSequence(){
          float [] copy = new float[lineSequence.length]; 
          for (int i=0; i <lineSequence.length; i++){
