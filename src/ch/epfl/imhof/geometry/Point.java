@@ -8,6 +8,14 @@ import java.util.function.Function;
  * 
  * @author Raphael Laporte (251209) / Romain Leteurtre (238162)
  */
+/**
+ * @author Romain
+ *
+ */
+/**
+ * @author Romain
+ *
+ */
 public final class Point {
     
     private final double x, y;
@@ -42,7 +50,7 @@ public final class Point {
     }
     
     /**
-     * redefinition de la methode equals(): utile dans OSMToGeoTransformer pour bien identifier deux noeuds equivalents
+     * Redefinition de la methode equals(): utile dans OSMToGeoTransformer pour bien identifier deux noeuds equivalents
      * 
      * @param o: Objet auquel on compare l'instance sur lequel la methode est appelée
      * 
@@ -58,7 +66,17 @@ public final class Point {
     public int hashCode(){
         return Objects.hash(x,y);
     }
-    // auuuuucune idee de si ca marche ou pas ! 
+    
+    /**
+     * Renvoie une fonction de changement de repère (repères alignés)
+     * 
+     * @param firstPoint1 : premier point dans repère initial
+     * @param firstPoint2 : premier point dans nouveau repère
+     * @param secondPoint1 : deuxième point dans repère initial
+     * @param secondPoint2 : deuxième point dans nouveau repère
+     * 
+     * @return fonction de changement repère alignés 
+     */
     public static Function<Point,Point> alignedCoordinateChange( Point firstPoint1, Point firstPoint2, Point secondPoint1, Point secondPoint2){
         if (firstPoint1.x() == secondPoint1.x() || firstPoint1.y() == secondPoint1.y()) throw new IllegalArgumentException();
         return  point -> {
