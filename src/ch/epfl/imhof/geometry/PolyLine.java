@@ -56,14 +56,7 @@ public abstract class PolyLine {
      */
     public static final class Builder{ 
 
-        private final List<Point> points;
-
-        /**
-         * Constructeur par default pour la classe Builder 
-         */
-        public Builder(){
-            points = new ArrayList<>();
-        }
+        private final List<Point> points = new ArrayList<>();
 
         /**
          * Methode qui ajoute un point à la liste des points qui sera utilisée pour construire une Polyline

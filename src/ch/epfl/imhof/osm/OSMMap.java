@@ -24,8 +24,8 @@ public final class OSMMap {
      * @param relations : Collection des relations de la carte  
      */
     public OSMMap(Collection<OSMWay> ways, Collection<OSMRelation> relations) {
-        this.ways = new ArrayList <> (ways);
-        this.relations = new ArrayList <> (relations);
+        this.ways = Collections.unmodifiableList( new ArrayList <> (ways));
+        this.relations = Collections.unmodifiableList( new ArrayList <> (relations));
     }
 
     /**
@@ -34,7 +34,7 @@ public final class OSMMap {
      * @return: La liste des ways
      */
     public List<OSMWay> ways(){
-        return Collections.unmodifiableList(ways); 
+        return ways;
     }
 
     /**
@@ -43,7 +43,7 @@ public final class OSMMap {
      * @return: La liste des relations
      */
     public List<OSMRelation> relations(){
-        return Collections.unmodifiableList(relations);
+        return relations;
     }
 
     /**

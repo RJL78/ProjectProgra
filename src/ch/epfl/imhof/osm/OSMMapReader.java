@@ -89,7 +89,7 @@ public final class OSMMapReader {
                     default :
                         type = null;
                         member = null;
-                        break;
+                        throw new SAXException();
                     }                           
                     if (member==null){
                         entityBuilder.setIncomplete();

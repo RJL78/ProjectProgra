@@ -1,5 +1,6 @@
 package ch.epfl.imhof;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -22,7 +23,7 @@ public final class Attributes {
      * @param attributes : une java.util.Map qui contient les paires ( attribut / valeur ) souhaitées. 
      */
     public Attributes(Map<String, String> attributes){
-        this.attributes = new HashMap<String, String> (attributes); 
+        this.attributes = Collections.unmodifiableMap(new HashMap<String, String> (attributes)); 
     }
     
    /**

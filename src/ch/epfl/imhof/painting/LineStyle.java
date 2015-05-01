@@ -12,6 +12,7 @@ public class LineStyle {
     private final float thickness; 
     private final float[] lineSequence;
     private final Color color;
+    private final static float[] defaultLineSequence = {1f};
 
     /**
      * Enumération des terminaisons des lignes
@@ -57,7 +58,7 @@ public class LineStyle {
      * @param thickness : épaisseur de la ligne
      */
     public LineStyle (Color color, float thickness){
-        this (color, thickness, LINE_END.BUTT, JOINT.MITER, new float [0]);
+        this (color, thickness, LINE_END.BUTT, JOINT.MITER, defaultLineSequence);
     }
 
 

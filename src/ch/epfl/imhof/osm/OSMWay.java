@@ -57,10 +57,7 @@ public final class OSMWay extends OSMEntity {
     * @return: La liste des noeuds qui constituent le chemin sans le dernier noeud si lastNode.equals(firstNode)
     */
     public List<OSMNode> nonRepeatingNodes() {
-        if (nodes.get(0).equals(nodes.get(nodes.size()-1))){
-            return Collections.unmodifiableList(nodes.subList(0, nodes.size()-1));
-        }
-        return Collections.unmodifiableList(nodes);
+        return (isClosed()) ? Collections.unmodifiableList(nodes.subList(0, nodes.size()-1)): Collections.unmodifiableList(nodes); 
     }
     
     /**
@@ -87,7 +84,7 @@ public final class OSMWay extends OSMEntity {
      * @return True si le dernier noeud est égal au premier, false sinon 
      */
     public boolean isClosed() {
-        return nodes.get(0).equals(nodes.get(nodes.size()-1));
+        return firstNode().equals(lastNode());
     }
     
     /**

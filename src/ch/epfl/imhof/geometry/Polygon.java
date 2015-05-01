@@ -33,8 +33,7 @@ public final class Polygon {
      * @return Instance représentant un polygone
      */
     public Polygon(ClosedPolyLine shell){
-        this.shell = shell; 
-        this.holes = new ArrayList<>();
+        this (shell, new ArrayList<ClosedPolyLine>());
     }
 
     /**

@@ -74,10 +74,7 @@ public final class ClosedPolyLine extends PolyLine {
     }
     
     private boolean isLeftof(Point point1, Point point2, Point p) {
-        if ((point1.x()-p.x())*(point2.y()-p.y())>(point2.x()-p.x())*(point1.y()-p.y())) {
-            return true;
-        }
-        return false;
+        return ((point1.x()-p.x())*(point2.y()-p.y())>(point2.x()-p.x())*(point1.y()-p.y()))? true: false;
     }
     
     private int IndexCor(int i, int n) {
