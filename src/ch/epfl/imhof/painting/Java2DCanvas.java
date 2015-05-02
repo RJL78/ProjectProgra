@@ -55,13 +55,12 @@ public class Java2DCanvas implements Canvas {
         return image;
     }
     
-    
-    // add to linestyle class
-    
+   
     
     @Override
     public void drawPolyline(PolyLine polyline, LineStyle lineStyle) {
-        Stroke s = new BasicStroke(lineStyle.getThickness()*72/resolution,lineStyle.getLineEnd().ordinal(),lineStyle.getJoint().ordinal(),(float)10.0,lineStyle.lineSequence(),0);
+        
+        Stroke s = new BasicStroke(lineStyle.getThickness()*72/resolution,lineStyle.getLineEnd().ordinal(),lineStyle.getJoint().ordinal(),(float)10.0,(lineStyle.lineSequence().length==0)? null: lineStyle.lineSequence(),0);
         Path2D path = makePath(polyline);
         if (polyline.isClosed()) path.closePath();
         ctx.setStroke(s);
@@ -101,17 +100,7 @@ public class Java2DCanvas implements Canvas {
     
     
     public static void main(String[] args) throws IOException, SAXException {
-        Predicate<Attributed<?>> isLake =
-                Filters.tagged("natural", "water", "road", "highway");
-            Painter lakesPainter =
-                Painter.polygon(Color.BLUE).when(isLake);
 
-            Predicate<Attributed<?>> isBuilding =
-                Filters.tagged("building");
-            Painter buildingsPainter =
-                Painter.polygon(Color.BLACK).when(isBuilding);
-
-            Painter painter = buildingsPainter.above(lakesPainter);
 
             OSMToGeoTransformer transformer = new OSMToGeoTransformer(new CH1903Projection());
             Map map = transformer.transform(OSMMapReader.readOSMFile("/Users/raphael/Sites/ProjectSemester2/src/ch/epfl/imhof/osm/lausanne.osm.gz", true));

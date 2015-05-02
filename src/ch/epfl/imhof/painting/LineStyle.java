@@ -12,7 +12,7 @@ public class LineStyle {
     private final float thickness; 
     private final float[] lineSequence;
     private final Color color;
-    private final static float[] defaultLineSequence = {1f};
+    private final static float[] defaultLineSequence = {};
 
     /**
      * Enumération des terminaisons des lignes
