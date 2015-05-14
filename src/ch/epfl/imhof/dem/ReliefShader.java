@@ -6,9 +6,11 @@ import java.awt.image.Kernel;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiFunction;
+import java.util.function.Function;
 
 import ch.epfl.imhof.PointGeo;
 import ch.epfl.imhof.Vector3;
+import ch.epfl.imhof.geometry.Point;
 import ch.epfl.imhof.painting.Color;
 import ch.epfl.imhof.projection.Projection;
 
@@ -24,11 +26,13 @@ public class ReliefShader {
        this.lightVector=lightVector;
     }
     
-    public Color[][] shadedRelief(PointGeo bottomLeftPoint, PointGeo topRightPoint, int pixelHeight, int pixelWidth, int blurRadius) {
-        return null;
+    public BufferedImage shadedRelief(Point bottomLeftPoint, Point topRightPoint, int pixelHeight, int pixelWidth, double blurRadius) {
+         return applyKurnel (
+                 shadedReliefRaw(pixelHeight, pixelWidth, Point.alignedCoordinateChange( new Point (pixelHeight,0), bottomLeftPoint, new Point(0,pixelHeight), topRightPoint)),
+                 gaussianVerticalKernel(blurRadius));
     }
    
-    private Color[][] shadedReliefRaw(int pixelHeight, int pixelWidth,Projection proj) {
+    private BufferedImage shadedReliefRaw(int pixelHeight, int pixelWidth, Function<Point,Point> f) {
         return null;
     }
     
@@ -38,7 +42,6 @@ public class ReliefShader {
         int n = (int) (2*r+1);
         float[] data = new float[n];
         float sum = 0;
-        List<Double> gausFilter = new ArrayList<>();
         for (int i= -r; i<=r; i++){
            float a = (float)Math.exp(-(i*i)/(2*o));
            data[i+r]= a;
@@ -52,7 +55,7 @@ public class ReliefShader {
     }
 
     
-    private Object wtf(Color[][] map, int radius) {
+    private BufferedImage applyKurnel (BufferedImage i, ConvolveOp c ) {
         return null;
     }
 }
