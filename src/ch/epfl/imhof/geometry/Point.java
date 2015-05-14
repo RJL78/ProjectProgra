@@ -78,7 +78,11 @@ public final class Point {
      * @return fonction de changement repère alignés 
      */
     public static Function<Point,Point> alignedCoordinateChange( Point firstPoint1, Point firstPoint2, Point secondPoint1, Point secondPoint2){
-        if (firstPoint1.x() == secondPoint1.x() || firstPoint1.y() == secondPoint1.y()) throw new IllegalArgumentException();
+        if (firstPoint1.x() == secondPoint1.x() || firstPoint1.y() == secondPoint1.y()){
+            System.out.println(firstPoint1.x() == secondPoint1.x());
+            System.out.println(firstPoint1.y() == secondPoint1.y());
+            throw new IllegalArgumentException();
+        }
         return  point -> {
             double a = (firstPoint2.x() - secondPoint2.x())/(firstPoint1.x() - secondPoint1.x());
             double b = (firstPoint2.y() - secondPoint2.y())/(firstPoint1.y() - secondPoint1.y());

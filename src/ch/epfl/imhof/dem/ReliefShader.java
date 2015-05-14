@@ -28,9 +28,10 @@ public class ReliefShader {
     
 
     public BufferedImage shadedRelief(Point bottomLeftPoint, Point topRightPoint, int pixelHeight, int pixelWidth, double blurRadius) {
-         return applyKernel (
-                 shadedReliefRaw(pixelHeight, pixelWidth, Point.alignedCoordinateChange( new Point (pixelHeight,0), bottomLeftPoint, new Point(0,pixelHeight), topRightPoint)),
-                 gaussianVerticalKernel(blurRadius));
+        int r = (int)Math.ceil(blurRadius); 
+        return applyKernel (
+                 shadedReliefRaw(pixelHeight+r, pixelWidth+r, Point.alignedCoordinateChange( new Point (pixelHeight,0), bottomLeftPoint, new Point(0,pixelWidth), topRightPoint)),
+                 gaussianVerticalKernel(blurRadius)).getSubimage(r, r, pixelWidth, pixelHeight);
     }
    
    
@@ -63,11 +64,11 @@ public class ReliefShader {
         for (int i=0; i<= 2*r+1; i++){
              data[i] /= sum;
         }
-        return new ConvolveOp (new Kernel(1, n,data));   
+        return new ConvolveOp (new Kernel(1, n,data), ConvolveOp.EDGE_NO_OP ,null);   
     }
     
     private BufferedImage applyKernel(BufferedImage image, ConvolveOp verticalConvolution) {
-        ConvolveOp horizontalConvolution = new ConvolveOp(new Kernel(verticalConvolution.getKernel().getHeight(),verticalConvolution.getKernel().getWidth(),verticalConvolution.getKernel().getKernelData(null)));
+        ConvolveOp horizontalConvolution = new ConvolveOp(new Kernel(verticalConvolution.getKernel().getHeight(),verticalConvolution.getKernel().getWidth(),verticalConvolution.getKernel().getKernelData(null)),ConvolveOp.EDGE_NO_OP,null);
         return horizontalConvolution.filter(verticalConvolution.filter(image,null), null);
     }
 }
