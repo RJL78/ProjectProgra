@@ -103,7 +103,7 @@ public class Java2DCanvas implements Canvas {
 
 
             OSMToGeoTransformer transformer = new OSMToGeoTransformer(new CH1903Projection());
-            Map map = transformer.transform(OSMMapReader.readOSMFile("/Users/raphael/Sites/ProjectSemester2/src/ch/epfl/imhof/osm/lausanne.osm.gz", true));
+            Map map = transformer.transform(OSMMapReader.readOSMFile("/Users/Romain/Documents/Eclipse-workspace/github/ProjectProgra/src/ch/epfl/imhof/osm/lausanne.osm.gz", true));
 
             // La toile
             Point bl = new Point(532510, 150590);
