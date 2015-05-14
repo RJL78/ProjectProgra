@@ -26,14 +26,27 @@ public class ReliefShader {
        this.lightVector=lightVector;
     }
     
+
     public BufferedImage shadedRelief(Point bottomLeftPoint, Point topRightPoint, int pixelHeight, int pixelWidth, double blurRadius) {
-         return applyKurnel (
+         return applyKernel (
                  shadedReliefRaw(pixelHeight, pixelWidth, Point.alignedCoordinateChange( new Point (pixelHeight,0), bottomLeftPoint, new Point(0,pixelHeight), topRightPoint)),
                  gaussianVerticalKernel(blurRadius));
     }
    
-    private BufferedImage shadedReliefRaw(int pixelHeight, int pixelWidth, Function<Point,Point> f) {
-        return null;
+   
+    private BufferedImage shadedReliefRaw(int pixelHeight, int pixelWidth, Function<Point,Point> coordinateChange) {
+        BufferedImage imageRelief = new BufferedImage(pixelWidth,pixelHeight,BufferedImage.TYPE_INT_RGB);
+        for (int i=0;i<pixelWidth;i++) {
+            for (int j=0;j<pixelHeight;j++) {
+                Point mapPoint = coordinateChange.apply(new Point(i,j));
+                PointGeo pointGeo = projection.inverse(mapPoint);
+                Vector3 pointVector = model.normalAt(pointGeo);
+                double angleCos = pointVector.scalarProduct(lightVector)/(pointVector.norm()*lightVector.norm());
+                Color newColor = Color.rgb(0.5*(angleCos+1),0.5*(angleCos+1),0.5*(0.7*angleCos+1));
+                imageRelief.setRGB(i, j, newColor.toAPIColor().getRGB());
+            }
+        }
+        return imageRelief;
     }
     
     private ConvolveOp gaussianVerticalKernel(double radius) {
@@ -50,12 +63,11 @@ public class ReliefShader {
         for (int i=0; i<= 2*r+1; i++){
              data[i] /= sum;
         }
-        return new ConvolveOp (new Kernel(1, n,data));
-           
+        return new ConvolveOp (new Kernel(1, n,data));   
     }
-
     
-    private BufferedImage applyKurnel (BufferedImage i, ConvolveOp c ) {
-        return null;
+    private BufferedImage applyKernel(BufferedImage image, ConvolveOp verticalConvolution) {
+        ConvolveOp horizontalConvolution = new ConvolveOp(new Kernel(verticalConvolution.getKernel().getHeight(),verticalConvolution.getKernel().getWidth(),verticalConvolution.getKernel().getKernelData(null)));
+        return horizontalConvolution.filter(verticalConvolution.filter(image,null), null);
     }
 }
