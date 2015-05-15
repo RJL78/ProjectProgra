@@ -30,8 +30,9 @@ public class Main {
         int width = (int)Math.round(height*(topRight.x()-bottomLeft.x())/(topRight.y()-bottomLeft.y()));
         System.out.println(height);
         System.out.println(width);
-        ReliefShader shader = new ReliefShader(new CH1903Projection(), new HGTDigitalElevationModel(new File(args[1])), new Vector3(-1,1,1) );
-        BufferedImage topo = shader.shadedRelief(bottomLeft, topRight, height, width, Math.sqrt(Integer.parseInt(args[6]))*25.4*1.7);
+        ReliefShader shader = new ReliefShader(proj, new HGTDigitalElevationModel(new File(args[1])), new Vector3(-1,1,1) );
+        BufferedImage topo = shader.shadedRelief(bottomLeft, topRight, height, width,50);
+                //Math.sqrt(Integer.parseInt(args[6]))*1.7/25.4);
         OSMToGeoTransformer transformer = new OSMToGeoTransformer(new CH1903Projection());
         Map map = transformer.transform(OSMMapReader.readOSMFile(args[0], true));
         Java2DCanvas canvas =
@@ -45,11 +46,11 @@ public class Main {
                 finalImage.setRGB(x, y, Color.rgb(mainImage.getRGB(x,y)).multiply(Color.rgb(topo.getRGB(x,y))).toAPIColor().getRGB());
             }
         }
-            ImageIO.write(finalImage, "png", new File("lozFINAL.png"));
+            ImageIO.write(topo, "png", new File("lozFINAL.png"));
     }
     
     public static void main(String [] args) throws IOException,SAXException{
-        String[] args1 = {"l/Users/raphael/Sites/ProjectSemester2/src/ch/epfl/imhof/osm/lausanne.osm.gz", "/Users/raphael/Sites/ProjectSemester2/src/ch/epfl/imhof/osm/N46E006.hgt", "6.5594", "46.5032", "6.6508", "46.5459",
+        String[] args1 = {"/Users/raphael/Sites/ProjectSemester2/src/ch/epfl/imhof/osm/lausanne.osm.gz", "/Users/raphael/Downloads/imhof-dems/N46E006.hgt", "6.5594", "46.5032", "6.6508", "46.5459",
                 "300", "lausanne.png"};
         main1(args1);
     }
