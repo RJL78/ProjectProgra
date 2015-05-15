@@ -17,7 +17,7 @@ public class HGTDigitalElevationModel implements DigitalElevationModel {
     private final double pointsPerSide;
     private final double seperation;
     private final double lowerLeftLongitude;
-    private final double  lowerLeftLatitude; 
+    private final double lowerLeftLatitude; 
 
     
     public HGTDigitalElevationModel(File f) throws IllegalArgumentException, IOException {
@@ -26,7 +26,7 @@ public class HGTDigitalElevationModel implements DigitalElevationModel {
         seperation = (1/(pointsPerSide-1.0))*Math.PI/180.0;
         try{
             lowerLeftLatitude = (Integer.parseInt(name.substring(1,3)) * ((name.startsWith("N"))? 1: -1))*Math.PI/180.0;
-            lowerLeftLongitude = (Integer.parseInt(name.substring(4,7)) * ((name.startsWith("W", 3))? 1: -1))*Math.PI/180.0; 
+            lowerLeftLongitude = (Integer.parseInt(name.substring(4,7)) * ((name.startsWith("W", 3))? -1: 1))*Math.PI/180.0; 
         }
         catch (NumberFormatException e){
             throw new IllegalArgumentException("Invalid file");
@@ -53,8 +53,8 @@ public class HGTDigitalElevationModel implements DigitalElevationModel {
         int latIndex = (lat==lowerLeftLatitude)? (int)pointsPerSide-1 :  (int)Math.floor((Math.PI/180.0-(lat-lowerLeftLatitude))/seperation);
         int lonIndex = (lon==(lowerLeftLongitude+Math.PI/180.0))? (int)pointsPerSide-1 : (int)Math.floor((lon-lowerLeftLongitude)/seperation);
         double a = get (latIndex,lonIndex); 
-        double b = get (latIndex,lonIndex+1);
-        double c = get (latIndex+1, lonIndex); 
+        double b = get (latIndex+1,lonIndex);
+        double c = get (latIndex, lonIndex+1); 
         double d = get (latIndex+1, lonIndex+1);
         double s = seperation*Earth.RADIUS;
         return new Vector3(0.5*s*(a-b+c-d),0.5*s*(a+b-c-d),s*s);
