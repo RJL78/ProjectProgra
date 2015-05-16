@@ -1,5 +1,6 @@
 package ch.epfl.imhof.dem;
 
+import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.awt.image.ConvolveOp;
 import java.awt.image.Kernel;
@@ -65,11 +66,11 @@ public class ReliefShader {
         }
         
         
-        return new ConvolveOp (new Kernel(1,n,data), ConvolveOp.EDGE_NO_OP ,null);   
+        return new ConvolveOp (new Kernel(1,n,data), ConvolveOp.EDGE_NO_OP , new RenderingHints(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON));   
     }
     
     private BufferedImage applyKernel(BufferedImage image, ConvolveOp verticalConvolution) {
-        ConvolveOp horizontalConvolution = new ConvolveOp(new Kernel(verticalConvolution.getKernel().getHeight(),verticalConvolution.getKernel().getWidth(),verticalConvolution.getKernel().getKernelData(null)),ConvolveOp.EDGE_NO_OP,null);
+        ConvolveOp horizontalConvolution = new ConvolveOp(new Kernel(verticalConvolution.getKernel().getHeight(),verticalConvolution.getKernel().getWidth(),verticalConvolution.getKernel().getKernelData(null)),ConvolveOp.EDGE_NO_OP,new RenderingHints(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON));
         return horizontalConvolution.filter(verticalConvolution.filter(image, null),null);
     }
 }

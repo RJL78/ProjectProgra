@@ -26,7 +26,7 @@ public class Main {
         PointGeo bottomLeftGeo = new PointGeo(Double.parseDouble(args[2])*Math.PI/180, Double.parseDouble(args[3])*Math.PI/180);
         Point topRight = proj.project(topRightGeo);
         Point bottomLeft = proj.project(bottomLeftGeo);
-        int height = (int)(Math.round(Double.parseDouble(args[6])*39.370*39.370*Earth.RADIUS*(topRightGeo.latitude()-bottomLeftGeo.latitude())*Math.PI/(360*25000) ));
+        int height = (int)(Math.round(Double.parseDouble(args[6])*39.370*Earth.RADIUS*(topRightGeo.latitude()-bottomLeftGeo.latitude())/25000));
         int width = (int)Math.round(height*(topRight.x()-bottomLeft.x())/(topRight.y()-bottomLeft.y()));
         ReliefShader shader = new ReliefShader(new CH1903Projection(), new HGTDigitalElevationModel(new File(args[1])), new Vector3(-1,1,1) );
         BufferedImage topo = shader.shadedRelief(bottomLeft, topRight, height, width, Integer.parseInt(args[6])*1.7/25.4);
@@ -48,7 +48,7 @@ public class Main {
     
     public static void main(String [] args) throws IOException,SAXException{
         String[] args1 = {"/Users/Romain/Documents/Eclipse-workspace/github/ProjectProgra/src/ch/epfl/imhof/osm/lausanne.osm.gz", "/Users/Romain/Documents/Eclipse-workspace/github/ProjectProgra/src/ch/epfl/imhof/osm/N46E006.hgt", "6.5594", "46.5032", "6.6508", "46.5459",
-                "300", "topo.png"};
+                "300", "lozFINAL.png"};
         main1(args1);
     }
 

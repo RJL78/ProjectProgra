@@ -55,8 +55,6 @@ public class Java2DCanvas implements Canvas {
         return image;
     }
     
-   
-    
     @Override
     public void drawPolyline(PolyLine polyline, LineStyle lineStyle) {
         

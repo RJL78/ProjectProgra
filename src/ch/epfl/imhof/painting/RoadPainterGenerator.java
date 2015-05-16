@@ -6,10 +6,10 @@ import ch.epfl.imhof.*;
 
 public abstract class RoadPainterGenerator {
     
-    private static Predicate<Attributed<?>> IS_ROAD = Filters.tagged("highway");
-    private static Predicate<Attributed<?>> IS_BRIDGE = IS_ROAD.and(Filters.tagged("bridge"));
-    private static Predicate<Attributed<?>> IS_TUNNEL = IS_ROAD.and(Filters.tagged("tunnel")); 
-   
+    private static Predicate<Attributed<?>> IS_BRIDGE = Filters.tagged("highway").and(Filters.tagged("bridge"));
+    private static Predicate<Attributed<?>> IS_TUNNEL = Filters.tagged("highway").and(Filters.tagged("tunnel")); 
+    private static Predicate<Attributed<?>> IS_ROAD = Filters.tagged("highway").and((IS_BRIDGE.or(IS_TUNNEL).negate()));
+
             
     private RoadPainterGenerator() {
     }
@@ -28,7 +28,7 @@ public abstract class RoadPainterGenerator {
         float wi = a[0].getWi();
         float[] seq = {2*wi,2*wi};
         l = l.withColor(interior? a[0].getCi() : a[0].getCc())
-                .withWidth(tunnel? wi/2 : interior? wi : wi+a[0].getWc())
+                .withWidth(tunnel? wi/2 : interior? wi : wi+2*a[0].getWc())
                 .withLineSequence(tunnel? seq: LineStyle.DEFAULT_LINE_SEQUENCE);
          
         Painter curr = Painter.line(l).when(a[0].getPredicate());

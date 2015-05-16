@@ -81,7 +81,7 @@ public interface Painter {
     }
     
     public default Painter layered(int n, int m) {
-        if (n>m) return this;
-        return layered(n+1,m).above(this.when(Filters.onLayer(n)));
+        if (n==m) return when(Filters.onLayer(n));
+        return layered(n+1,m).above(when(Filters.onLayer(n)));
     }
 }
