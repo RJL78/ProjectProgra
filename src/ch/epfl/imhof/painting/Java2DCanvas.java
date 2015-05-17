@@ -60,7 +60,7 @@ public class Java2DCanvas implements Canvas {
     @Override
     public void drawPolyline(PolyLine polyline, LineStyle lineStyle) {
         
-        Stroke s = new BasicStroke(lineStyle.getThickness()*72/resolution,lineStyle.getLineEnd().ordinal(),lineStyle.getJoint().ordinal(),(float)10.0,(lineStyle.lineSequence().length==0)? null: lineStyle.lineSequence(),0);
+        Stroke s = new BasicStroke(lineStyle.getThickness(),lineStyle.getLineEnd().ordinal(),lineStyle.getJoint().ordinal(),(float)10.0,(lineStyle.lineSequence().length==0)? null: lineStyle.lineSequence(),0);
         Path2D path = makePath(polyline);
         if (polyline.isClosed()) path.closePath();
         ctx.setStroke(s);

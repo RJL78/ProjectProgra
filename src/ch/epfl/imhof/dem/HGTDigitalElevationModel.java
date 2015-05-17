@@ -17,7 +17,7 @@ public class HGTDigitalElevationModel implements DigitalElevationModel {
     private final double pointsPerSide;
     private final double seperation;
     private final double lowerLeftLongitude;
-    private final double  lowerLeftLatitude; 
+    private final double lowerLeftLatitude; 
 
     
     public HGTDigitalElevationModel(File f) throws IllegalArgumentException, IOException {
