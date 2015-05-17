@@ -4,6 +4,12 @@ import java.util.function.Predicate;
 
 import ch.epfl.imhof.*;
 
+/** 
+ * Classe non-instantiable avec une méthode statique qui fournit le peintre du réseau routier
+ * 
+ * @author Raphael Laporte (251209) / Romain Leteurtre (238162)
+ *
+ */
 public abstract class RoadPainterGenerator {
     
     private static Predicate<Attributed<?>> IS_BRIDGE = Filters.tagged("highway").and(Filters.tagged("bridge"));
@@ -14,6 +20,16 @@ public abstract class RoadPainterGenerator {
     private RoadPainterGenerator() {
     }
     
+    /** 
+     * Méthode créant et retourant un peintre du réseau routier. 
+     * 
+     * @param args : Les roadspec indiquant comment le peintre à retourner doit se comporter ( attention - dans chacune des couches de ce peintre
+     * ie. pont interieur, pont exterieur, route interieur, route exterieur, tunnel : la sous-couche correpondant au premier argument sera peinte
+     *  au dessus de la sous-couche correspondant au deuxieme et ainsi de suite )
+     *              
+     * @return : Le peintre avec les caractéristiques voulues 
+     *
+     */
     public static Painter painterForRoads(RoadSpec ... args){
         LineStyle templateA = new LineStyle(null, 0f, LineStyle.LINE_END.ROUND,LineStyle.JOINT.ROUND,LineStyle.DEFAULT_LINE_SEQUENCE);
         LineStyle templateB = templateA.withLineEnd(LineStyle.LINE_END.BUTT);
@@ -34,8 +50,13 @@ public abstract class RoadPainterGenerator {
         Painter curr = Painter.line(l).when(a[0].getPredicate());
         return (a.length==1) ? curr : curr.above(recursivePainterForRoads(Arrays.copyOfRange(a, 1, a.length), tunnel, interior, l));
     }
-
-
+    
+    /** 
+     * Classe imbriquée statiquement servant de holder pour les différentes variables qui pourraient décrire comment peindre une route
+     * 
+     * @author Raphael Laporte (251209) / Romain Leteurtre (238162)
+     *
+     */
     public static class RoadSpec{
         
         private final Predicate<Attributed<?>> predicate;
@@ -43,6 +64,15 @@ public abstract class RoadPainterGenerator {
         private final Color ci;
         private final float wc;
         private final Color cc;
+        
+        /**Constructeur pour le holder 
+         * 
+         * @param predicate : le prédicat servant à indiquer quand es-ce que une route doit être peinte avec ces caractéristiques 
+         * @param wi : largeur de l'intérieur de la route
+         * @param ci : couleur de l'intérieur de la route
+         * @param wc : largeur de la bordure de la route   
+         * @param cc : couleur de la bordure de la route 
+         */
         
         public RoadSpec(Predicate<Attributed<?>> predicate, float wi, Color ci, float wc, Color cc){
             this.predicate = predicate; 
@@ -52,22 +82,47 @@ public abstract class RoadPainterGenerator {
             this.cc = cc; 
         }
         
+        /**
+         * Getter
+         * 
+         * @return le prédicat servant à indiquer quand es-ce que une route doit être peinte avec ces caractéristiques
+         */
         public Predicate<Attributed<?>> getPredicate(){
             return predicate;
         }
         
+        /**
+         * Getter
+         * 
+         * @return largeur de l'intérieur de la route
+         */
         public float getWi(){
             return wi;
         }
         
+        /**
+         * Getter
+         * 
+         * @return couleur de l'intérieur de la route
+         */
         public Color getCi(){
             return ci;
         }
         
+        /**
+         * Getter
+         * 
+         * @return largeur de la bordure de la route 
+         */
         public float getWc(){
             return wc;
         }
         
+        /**
+         * Getter
+         * 
+         * @return couleur de la bordure de la route 
+         */
         public Color getCc(){
             return cc;
         }

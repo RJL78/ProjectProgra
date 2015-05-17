@@ -37,8 +37,8 @@ public class Java2DCanvas implements Canvas {
     public Java2DCanvas(Point pointLowerLeft, Point pointUpperRight, int height, int width, int resolution, Color colorBack) {   
        
         double scale = resolution/72d;
-        Point pointLowerLeftImage = new Point(0,height*scale);
-        Point pointUpperRightImage = new Point(width*scale,0);
+        Point pointLowerLeftImage = new Point(0,height/scale);
+        Point pointUpperRightImage = new Point(width/scale,0);
        
         coordinateChange= Point.alignedCoordinateChange(pointLowerLeft, pointLowerLeftImage, pointUpperRight, pointUpperRightImage);
         image = new BufferedImage(width,height,BufferedImage.TYPE_INT_RGB);

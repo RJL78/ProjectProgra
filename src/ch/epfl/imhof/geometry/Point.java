@@ -8,14 +8,8 @@ import java.util.function.Function;
  * 
  * @author Raphael Laporte (251209) / Romain Leteurtre (238162)
  */
-/**
- * @author Romain
- *
- */
-/**
- * @author Romain
- *
- */
+
+
 public final class Point {
     
     private final double x, y;
@@ -85,7 +79,7 @@ public final class Point {
         double a = (firstPointNew.x() - secondPointNew.x())/(firstPointOld.x() - secondPointOld.x());
         double b = firstPointNew.x()-a*firstPointOld.x();
         double c = (firstPointNew.y() - secondPointNew.y())/(firstPointOld.y() - secondPointOld.y());
-        double d = firstPointNew.y()-b*firstPointOld.y();
+        double d = firstPointNew.y()-c*firstPointOld.y();
         
         return  point -> new Point(point.x()*a+b,point.y()*c+d);
     }
