@@ -6,10 +6,10 @@ import ch.epfl.imhof.*;
 
 public abstract class RoadPainterGenerator {
     
-    private static Predicate<Attributed<?>> IS_ROAD = Filters.tagged("highway");
-    private static Predicate<Attributed<?>> IS_BRIDGE = IS_ROAD.and(Filters.tagged("bridge"));
-    private static Predicate<Attributed<?>> IS_TUNNEL = IS_ROAD.and(Filters.tagged("tunnel")); 
-   
+    private static Predicate<Attributed<?>> IS_BRIDGE = Filters.tagged("highway").and(Filters.tagged("bridge"));
+    private static Predicate<Attributed<?>> IS_TUNNEL = Filters.tagged("highway").and(Filters.tagged("tunnel")); 
+    private static Predicate<Attributed<?>> IS_ROAD = Filters.tagged("highway").and((IS_BRIDGE.or(IS_TUNNEL).negate()));
+
             
     private RoadPainterGenerator() {
     }

@@ -10,7 +10,6 @@ public class Vector3 {
         this.x = x;
         this.y = y;
         this.z = z;
-        // TODO Auto-generated constructor stub
     }
     
     public double norm(){

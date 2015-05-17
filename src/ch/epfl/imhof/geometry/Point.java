@@ -50,18 +50,18 @@ public final class Point {
     }
     
     /**
-     * Redefinition de la methode equals(): utile dans OSMToGeoTransformer pour bien identifier deux noeuds equivalents
+     * Redefinition de la methode equals(): utile dans OSMToGeoTransformer pour bien identifier deux noeuds équivalents
      * 
      * @param o: Objet auquel on compare l'instance sur lequel la methode est appelée
      * 
-     * @return True si les deux objets comparés sont equivalents, false sinon
+     * @return True si les deux objets comparés sont équivalents, false sinon
      */
     public boolean equals(Object o){
         return ((o.getClass()==this.getClass()) ? (((Point)o).y()==y && ((Point)o).x()==x ) : false);
     }
     
     /**
-     * Redifinition de hashcode : necessaire pour verifier que deux elements egaux selon la methode equals presentent le meme hashcoe
+     * Redéfinition de hashcode : necessaire pour verifier que deux elements égaux selon la methode equals présentent le meme hashcode
      */
     public int hashCode(){
         return Objects.hash(x,y);
@@ -70,25 +70,23 @@ public final class Point {
     /**
      * Renvoie une fonction de changement de repère (repères alignés)
      * 
-     * @param firstPoint1 : premier point dans repère initial
-     * @param firstPoint2 : premier point dans nouveau repère
-     * @param secondPoint1 : deuxième point dans repère initial
-     * @param secondPoint2 : deuxième point dans nouveau repère
+     * @param firstPointOld : premier point dans repère initial
+     * @param firstPointNew : premier point dans nouveau repère
+     * @param secondPointOld : deuxième point dans repère initial
+     * @param secondPointNew : deuxième point dans nouveau repère
      * 
-     * @return fonction de changement repère alignés 
+     * @return fonction de changement de repères alignés 
      */
-    public static Function<Point,Point> alignedCoordinateChange( Point firstPoint1, Point firstPoint2, Point secondPoint1, Point secondPoint2){
-        if (firstPoint1.x() == secondPoint1.x() || firstPoint1.y() == secondPoint1.y()){
-            System.out.println(firstPoint1.x() == secondPoint1.x());
-            System.out.println(firstPoint1.y() == secondPoint1.y());
+    public static Function<Point,Point> alignedCoordinateChange( Point firstPointOld, Point firstPointNew, Point secondPointOld, Point secondPointNew){
+       if (firstPointOld.x() == secondPointOld.x() || firstPointOld.y() == secondPointOld.y()){
             throw new IllegalArgumentException();
         }
-        return  point -> {
-            double a = (firstPoint2.x() - secondPoint2.x())/(firstPoint1.x() - secondPoint1.x());
-            double b = (firstPoint2.y() - secondPoint2.y())/(firstPoint1.y() - secondPoint1.y());
-            double c = firstPoint2.x()-a*firstPoint1.x();
-            double d = firstPoint2.y()-b*firstPoint1.y();
-            return new Point(point.x()*a+c,point.y()*b+d);
-        };
+        
+        double a = (firstPointNew.x() - secondPointNew.x())/(firstPointOld.x() - secondPointOld.x());
+        double b = firstPointNew.x()-a*firstPointOld.x();
+        double c = (firstPointNew.y() - secondPointNew.y())/(firstPointOld.y() - secondPointOld.y());
+        double d = firstPointNew.y()-b*firstPointOld.y();
+        
+        return  point -> new Point(point.x()*a+b,point.y()*c+d);
     }
 }

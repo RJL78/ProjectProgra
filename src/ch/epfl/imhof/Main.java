@@ -27,8 +27,7 @@ public class Main {
         PointGeo bottomLeftGeo = new PointGeo(Double.parseDouble(args[2])*Math.PI/180, Double.parseDouble(args[3])*Math.PI/180);
         Point topRight = proj.project(topRightGeo);
         Point bottomLeft = proj.project(bottomLeftGeo);
-        
-        int height = (int)(Math.round( Double.parseDouble(args[6])*39.370*Earth.RADIUS*(topRightGeo.latitude()-bottomLeftGeo.latitude())/25000) );
+        int height = (int)(Math.round(Double.parseDouble(args[6])*39.370*Earth.RADIUS*(topRightGeo.latitude()-bottomLeftGeo.latitude())/25000));
         int width = (int)Math.round(height*(topRight.x()-bottomLeft.x())/(topRight.y()-bottomLeft.y()));
         
         System.out.println(height);
@@ -54,8 +53,10 @@ public class Main {
     }
     
     public static void main(String [] args) throws IOException,SAXException{
+
         String[] args1 = {"/Users/Raphael/Sites/ProjectSemester2/src/ch/epfl/imhof/osm/lausanne.osm.gz", "/Users/raphael/Downloads/imhof-dems/N46E006.hgt", "6.5594", "46.5032", "6.6508", "46.5459",
                 "300", "topo.png"};
+
         main1(args1);
     }
 

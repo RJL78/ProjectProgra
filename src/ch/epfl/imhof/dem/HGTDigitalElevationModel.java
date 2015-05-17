@@ -57,7 +57,7 @@ public class HGTDigitalElevationModel implements DigitalElevationModel {
         double c = get (latIndex, lonIndex+1); 
         double d = get (latIndex+1, lonIndex+1);
         double s = seperation*Earth.RADIUS;
-        return new Vector3(0.5*s*(a-b+c-d),0.5*s*(a+b-c-d),s*s);
+        return new Vector3(0.5*s*(a-b+c-d),-0.5*s*(a+b-c-d),s*s);
     }
     
     
