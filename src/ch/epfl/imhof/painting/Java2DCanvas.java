@@ -96,7 +96,6 @@ public class Java2DCanvas implements Canvas {
         
         ctx.setStroke(new BasicStroke (0,BasicStroke.CAP_SQUARE, BasicStroke.JOIN_BEVEL, (float)10.0 , null ,0));
         ctx.setColor(color.toAPIColor());
-        ctx.draw(shellArea);
         ctx.fill(shellArea); 
     }
     

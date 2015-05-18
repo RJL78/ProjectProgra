@@ -74,7 +74,7 @@ public class Main {
     
     public static void main(String [] args) throws IOException,SAXException, Exception{
 
-        String[] args1 = {"/Users/Raphael/Sites/ProjectSemester2/src/ch/epfl/imhof/osm/lausanne.osm.gz", "/Users/Raphael/Downloads/imhof-dems/N46E006.hgt", "6.5594", "46.5032", "6.6508", "46.5459",
+        String[] args1 = {"/Users/Romain/Documents/Eclipse-workspace/github/ProjectProgra/src/ch/epfl/imhof/osm/lausanne.osm.gz", "/Users/Romain/Documents/Eclipse-workspace/github/ProjectProgra/src/ch/epfl/imhof/osm/N46E006.hgt", "6.5594", "46.5032", "6.6508", "46.5459",
                 "300", "topo.png"};
 
         main1(args1);
