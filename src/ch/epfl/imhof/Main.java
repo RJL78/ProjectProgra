@@ -19,6 +19,23 @@ import ch.epfl.imhof.painting.Java2DCanvas;
 import ch.epfl.imhof.projection.CH1903Projection;
 import ch.epfl.imhof.projection.Projection;
 
+/**
+ * Classe principale de notre projet: 
+ * 
+ * La fonction main prends les huit arguments ci-dessous, dans cet ordre la  ( en tant que tableau de string ) : 
+ *  -le nom (chemin) d'un fichier OSM compressé avec gzip contenant les données de la carte à dessiner,
+ *  -le nom (chemin) d'un fichier HGT couvrant la totalité de la zone de la carte à dessiner, zone tampon incluse,
+ *  -la longitude du point bas-gauche de la carte, en degrés,
+ *  -la latitude du point bas-gauche de la carte, en degrés,
+ *  -la longitude du point haut-droite de la carte, en degrés,
+ *  -la latitude du point haut-droite de la carte, en degrés,
+ *  -la résolution de l'image à dessiner, en points par pouce (dpi),
+ *  -le nom (chemin) du fichier PNG à générer.
+ * 
+ * 
+ * @author Raphael Laporte (251209) / Romain Leteurtre (238162)
+ *
+ */
 public class Main {
   // je les mets en prive pour pas avoir a les commenter...   
    private final static double INCHES_PER_METER = 39.370;
@@ -57,7 +74,7 @@ public class Main {
     
     public static void main(String [] args) throws IOException,SAXException, Exception{
 
-        String[] args1 = {"/Users/Romain/Documents/Eclipse-workspace/github/ProjectProgra/src/ch/epfl/imhof/osm/lausanne.osm.gz", "/Users/Romain/Documents/Eclipse-workspace/github/ProjectProgra/src/ch/epfl/imhof/osm/N46E006.hgt", "6.5594", "46.5032", "6.6508", "46.5459",
+        String[] args1 = {"/Users/Raphael/Sites/ProjectSemester2/src/ch/epfl/imhof/osm/lausanne.osm.gz", "/Users/Raphael/Downloads/imhof-dems/N46E006.hgt", "6.5594", "46.5032", "6.6508", "46.5459",
                 "300", "topo.png"};
 
         main1(args1);

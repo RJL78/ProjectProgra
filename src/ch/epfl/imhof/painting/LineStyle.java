@@ -12,6 +12,10 @@ public class LineStyle {
     private final float thickness; 
     private final float[] lineSequence;
     private final Color color;
+    /**
+     * Constante publique, à utiliser pour le paramètre "lineSequence" dans le constructeur de cette classe, 
+     * si on désire obtenir une ligne continue; 
+     */
     public final static float[] DEFAULT_LINE_SEQUENCE = {};
 
     /**
