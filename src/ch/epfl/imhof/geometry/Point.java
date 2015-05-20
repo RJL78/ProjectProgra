@@ -61,6 +61,8 @@ public final class Point {
         return Objects.hash(x,y);
     }
     
+    
+    
     /**
      * Renvoie une fonction de changement de repère (repères alignés)
      * 

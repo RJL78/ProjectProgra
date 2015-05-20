@@ -92,7 +92,7 @@ public class ReliefShader {
              data[i] /=sum;
         }
                 
-        return new ConvolveOp (new Kernel(1,n,data), ConvolveOp.EDGE_NO_OP , new RenderingHints(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON));   
+        return new ConvolveOp (new Kernel(1,n,data), ConvolveOp.EDGE_NO_OP , null);   
     }
     
     private BufferedImage applyKernel(BufferedImage image, ConvolveOp verticalConvolution) {
