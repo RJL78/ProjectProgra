@@ -75,7 +75,7 @@ public interface Painter {
     
     /**
      * Crée un peintre dessinant toutes les lignes de la carte qu'on lui fournit avec un style correspondant
-     * aux éléments de style donnés
+     * aux éléments de style donnés, et avec les valeurs suivantes ( par défault : lineEnd - LINE_END.BUTT / Joint - JOINT.MITER / linesequence: {} )
      * 
      * @param color : couleur de la ligne
      * @param thickness : épaisseur de la ligne
@@ -170,14 +170,22 @@ public interface Painter {
     
     /**
      * Retourne un peintre utilisant l'attribut layer attaché aux entités de la carte pour la dessiner par couches
-     * 
      * @return le peintre dessinant par couche
      */
     public default Painter layered() {
         return layered(-5,5);
     }
     
-    public default Painter layered(int n, int m) {
+    /**
+     * Retourne un peintre utilisant l'attribut layer attaché aux entités de la carte pour la dessiner par couches
+     * 
+     * @param n: Couche la plus basse (inclusive)
+     * @param m : Couche la plus haute (inclusive)
+     * 
+     * @return le peintre dessinant par couche
+     */
+    public default Painter layered(int n, int m) { // !!! ASK TA !!! on peut pas utiliser une méthode privée dans une interface... mais bon, on augmente la fonctionalité, donc tant mieux ? :) 
+        if(m<n) throw new IllegalArgumentException ("second parameter is inferior to the first one");
         if (n==m) return when(Filters.onLayer(n));
         return layered(n+1,m).above(when(Filters.onLayer(n)));
     }

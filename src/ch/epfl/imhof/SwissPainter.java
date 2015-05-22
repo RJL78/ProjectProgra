@@ -12,7 +12,11 @@ import ch.epfl.imhof.painting.LineStyle.LINE_END;
 import ch.epfl.imhof.painting.Painter;
 import ch.epfl.imhof.painting.RoadPainterGenerator;
 import ch.epfl.imhof.painting.RoadPainterGenerator.RoadSpec;
-
+ /**
+  * Classe définisant au travers de la constante PAINTER ( retournée par la méthode painter() ) le Painter qui définit le peintre à utiliser pour dessiner la carte
+  * 
+  * @author: l'equipe éducative de CS108
+  */
 public final class SwissPainter {
     private static final Painter PAINTER;
 

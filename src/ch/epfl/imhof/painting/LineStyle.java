@@ -49,8 +49,8 @@ public class LineStyle {
         this.lineEnd = lineEnd;
         this.joint = joint; 
         this.lineSequence = new float[lineSequence.length]; 
-        for (int i=0; i <lineSequence.length; i++){
-            if (lineSequence[i] <= 0 ) throw new IllegalArgumentException();
+        for (int i=0; i <lineSequence.length; i++){ 
+            if (lineSequence[i] <= 0 ) throw new IllegalArgumentException("Non-positive float in lineSequence"); // vérifie que la séquence de float est bien valide 
             this.lineSequence[i] = lineSequence[i];
         }
     }

@@ -7,6 +7,7 @@ import java.awt.Stroke;
 import java.awt.geom.Area;
 import java.awt.geom.Path2D;
 import java.awt.image.BufferedImage;
+import java.util.List;
 import java.util.function.Function;
 
 import ch.epfl.imhof.geometry.Point;
@@ -48,6 +49,7 @@ public class Java2DCanvas implements Canvas {
         ctx.setColor(colorBack.toAPIColor());
         ctx.fillRect(0, 0, width, height);
         ctx.scale(scale, scale);
+        
     }
     
     /**
@@ -55,6 +57,7 @@ public class Java2DCanvas implements Canvas {
      * 
      * @return image de la toile
      */
+    //!!! ASK TA !!! Immuabilité? 
     public BufferedImage image() {
         return image;
     }
@@ -69,7 +72,13 @@ public class Java2DCanvas implements Canvas {
     @Override
     public void drawPolyline(PolyLine polyline, LineStyle lineStyle) {
         
-        Stroke s = new BasicStroke(lineStyle.getThickness(),lineStyle.getLineEnd().ordinal(),lineStyle.getJoint().ordinal(),(float)10.0,(lineStyle.lineSequence().length==0)? null: lineStyle.lineSequence(),0);
+        Stroke s = new BasicStroke(
+                lineStyle.getThickness(),
+                lineStyle.getLineEnd().ordinal(),
+                lineStyle.getJoint().ordinal(),
+                (float)10.0,
+                (lineStyle.lineSequence().length == 0)? null: lineStyle.lineSequence(),0);
+                    // Passe null au constructeur de BasicStroke si l'instance de LineStyle mis en paramètre a pour attribut "lineSequence", lineStyle.DEFAULT_LINE_SEQUENCE
         ctx.setStroke(s);
         ctx.setColor(lineStyle.getColor().toAPIColor());
         Path2D path = makePath(polyline);
@@ -94,10 +103,8 @@ public class Java2DCanvas implements Canvas {
             shellArea.subtract(new Area(holePath));
         }
         
-        ctx.setStroke(new BasicStroke (0,BasicStroke.CAP_SQUARE, BasicStroke.JOIN_BEVEL));
-       // , (float)10.0 , null ,0));
+        ctx.setStroke(new BasicStroke (0,BasicStroke.CAP_SQUARE, BasicStroke.JOIN_BEVEL, 10.0f, null, 0));
         ctx.setColor(color.toAPIColor());
-        //  ctx.draw(shellArea);
         ctx.fill(shellArea); 
     }
     
@@ -106,12 +113,15 @@ public class Java2DCanvas implements Canvas {
         Path2D path = new Path2D.Double();
         Point firstPoint = coordinateChange.apply(polyline.firstPoint());
         path.moveTo(firstPoint.x(),firstPoint.y());
+        List<Point> remainingPoints = polyline.points().subList(1,polyline.points().size());
         
-        for (Point point : polyline.points()) {
+      //!!! ASK TA !!! Confirmer efficacite
+        for (Point point: remainingPoints) {
             point = coordinateChange.apply(point);
             path.lineTo(point.x(), point.y());
         }
         if (polyline.isClosed()) path.closePath();
+        // La liste de points de closedPolyLine ne contient pas de points en double ( du fait de l'utilisation de OSMWay.nonRepeatingNodes() dans OSMtoGeoTransformer)
       
         return path;
     }

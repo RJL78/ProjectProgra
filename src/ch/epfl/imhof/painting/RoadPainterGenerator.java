@@ -10,11 +10,12 @@ import ch.epfl.imhof.*;
  * @author Raphael Laporte (251209) / Romain Leteurtre (238162)
  *
  */
-public abstract class RoadPainterGenerator {
+// !!! ASK TA !!! final ? abstract ? for non-instantiable class
+public class RoadPainterGenerator {
     
-    private static Predicate<Attributed<?>> IS_BRIDGE = Filters.tagged("highway").and(Filters.tagged("bridge"));
-    private static Predicate<Attributed<?>> IS_TUNNEL = Filters.tagged("highway").and(Filters.tagged("tunnel")); 
-    private static Predicate<Attributed<?>> IS_ROAD = Filters.tagged("highway").and((IS_BRIDGE.or(IS_TUNNEL).negate()));
+    private static final Predicate<Attributed<?>> IS_BRIDGE = Filters.tagged("highway").and(Filters.tagged("bridge"));
+    private static final Predicate<Attributed<?>> IS_TUNNEL = Filters.tagged("highway").and(Filters.tagged("tunnel")); 
+    private static final Predicate<Attributed<?>> IS_ROAD = Filters.tagged("highway").and((IS_BRIDGE.or(IS_TUNNEL).negate()));
 
             
     private RoadPainterGenerator() {
@@ -40,14 +41,18 @@ public abstract class RoadPainterGenerator {
                 .above(recursivePainterForRoads(args,true, false, templateB).when(IS_TUNNEL));
     }
     
+    // méthode privée, retourne les peintres correspondant aux elements du 1er paramètre, empilés dans l'ordre ( plus petit indice en haut) 
+    // utile pour pouvoir séparer les 5 niveaux pour peindre les route ( cette méthode est appelé par PainterForRoads une fois pour les ponts, une fois pour l'exterieur des tunnels, une fois pour l'interieur des tunnels... et ainsi de suite
     private static Painter recursivePainterForRoads(RoadSpec[] a, boolean tunnel, boolean interior, LineStyle l){
+        //RoadSpec spec = a[0] - !!! ASK TA !!! should we add a variable for curr? or is a[0] already a direct memory access?
         float wi = a[0].getWi();
-        float[] seq = {2*wi,2*wi};
+        float[] tunnelSeq = {2*wi,2*wi};
         l = l.withColor(interior? a[0].getCi() : a[0].getCc())
                 .withWidth(tunnel? wi/2 : interior? wi : wi+2*a[0].getWc())
-                .withLineSequence(tunnel? seq: LineStyle.DEFAULT_LINE_SEQUENCE);
+                .withLineSequence(tunnel? tunnelSeq: LineStyle.DEFAULT_LINE_SEQUENCE);
          
         Painter curr = Painter.line(l).when(a[0].getPredicate());
+        // Ci dessous: appel recursif pour gérer les autres RoadSpec du tableau mis en paramètre 
         return (a.length==1) ? curr : curr.above(recursivePainterForRoads(Arrays.copyOfRange(a, 1, a.length), tunnel, interior, l));
     }
     

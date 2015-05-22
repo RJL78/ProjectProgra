@@ -75,9 +75,10 @@ public final class Point {
      */
     public static Function<Point,Point> alignedCoordinateChange( Point firstPointOld, Point firstPointNew, Point secondPointOld, Point secondPointNew){
        if (firstPointOld.x() == secondPointOld.x() || firstPointOld.y() == secondPointOld.y()){
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("The two points used as arguments are on the same vertical or horizontal line");
         }
         
+       // !!! ASK TA !!! Should we be dividing more into local variables? 
         double a = (firstPointNew.x() - secondPointNew.x())/(firstPointOld.x() - secondPointOld.x());
         double b = firstPointNew.x()-a*firstPointOld.x();
         double c = (firstPointNew.y() - secondPointNew.y())/(firstPointOld.y() - secondPointOld.y());

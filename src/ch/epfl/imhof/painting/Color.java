@@ -7,7 +7,9 @@ package ch.epfl.imhof.painting;
  * @author Raphael Laporte (251209) / Romain Leteurtre (238162)
  */
 public class Color {
-    
+    /**
+     * Constantes publiques, représentant chacune une couleur différente ( Rouge, vert, bleu, noir, blanc ) 
+     */
     public static final Color RED = new Color(1,0,0);
     public static final Color GREEN = new Color(0,1,0);
     public static final Color BLUE = new Color(0,0,1);

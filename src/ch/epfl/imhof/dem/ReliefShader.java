@@ -4,6 +4,7 @@ import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.awt.image.ConvolveOp;
 import java.awt.image.Kernel;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiFunction;
@@ -42,7 +43,7 @@ public class ReliefShader {
     }
     
     // Does our shit work for something on the other side of the world? 
-    // Points en argument a mettre en Radians - change input type?
+    // !!! ASK TA !!! Points en argument a mettre en Radians - change input type?
     /**
      * Retourne une image représentant la topographie de la zone dans le rectangle formé par bottomLeftPoint et par topRightPoint
      * 
@@ -52,30 +53,49 @@ public class ReliefShader {
      * @param pixelWidth : Largeur de l'image qui va être retournée ( en pixels ) 
      * @param blurRadius : Le rayon de floutage qui doit être appliqué à l'image
      * @return une image représentant la topographie de la zone 
+     * @throws Exception 
      */
-    public BufferedImage shadedRelief(Point bottomLeftPoint, Point topRightPoint, int pixelHeight, int pixelWidth, double blurRadius) throws Exception {
-        if (blurRadius<0) throw new IllegalArgumentException (); // I dunno if I should be doing this ... 
+ // !!! ASK TA !!! What exceptions should be thrown?
+    public BufferedImage shadedRelief(Point bottomLeftPoint, Point topRightPoint, int pixelHeight, int pixelWidth, double blurRadius) throws Exception   {
+       
+        if (blurRadius<0) throw new IllegalArgumentException (); 
+       
         int r = (int) Math.ceil(blurRadius);
-        BufferedImage topo = shadedReliefRaw(pixelHeight+2*r, pixelWidth+2*r,Point.alignedCoordinateChange( new Point (r,pixelHeight+r), bottomLeftPoint, new Point(pixelWidth+r,r), topRightPoint));
+        Function<Point,Point> coordinateChange = Point.alignedCoordinateChange( new Point (r,pixelHeight+r), bottomLeftPoint, new Point(pixelWidth+r,r), topRightPoint);
+        BufferedImage topo = shadedReliefRaw(pixelHeight+2*r,pixelWidth+2*r, coordinateChange);
+        
+        model.close();
+        
         return (blurRadius == 0) ? topo : applyKernel (topo, gaussianVerticalKernel(blurRadius)).getSubimage(r, r, pixelWidth, pixelHeight);
     }
-   
   
-    private BufferedImage shadedReliefRaw(int pixelHeight, int pixelWidth, Function<Point,Point> coordinateChange) throws Exception {
+    // Crée la carte topographique sans floutage
+    private BufferedImage shadedReliefRaw(int pixelHeight, int pixelWidth, Function<Point,Point> coordinateChange) {
+        
         BufferedImage imageRelief = new BufferedImage(pixelWidth,pixelHeight,BufferedImage.TYPE_INT_RGB);
+        
         for (int i=0;i<pixelWidth;i++) {
             for (int j=0;j<pixelHeight;j++) {
-                // unnessary conversions? 
-                Vector3 pointVector = model.normalAt(projection.inverse(coordinateChange.apply(new Point(i,j))));
+                
+                Point mapPoint = coordinateChange.apply(new Point(i,j));
+                PointGeo geoPoint = projection.inverse(mapPoint);
+                Vector3 pointVector = model.normalAt(geoPoint);
+                // !! ask TA !! pathetic desire to use itermediate variables 
+                
                 double angleCos = pointVector.scalarProduct(lightVector)/(pointVector.norm()*lightVector.norm());
-                Color newColor = Color.rgb(0.5*(angleCos+1),0.5*(angleCos+1),0.5*(0.7*angleCos+1));
+                double redAndGreen = 0.5*(angleCos+1);
+                double blue =  0.5*(0.7*angleCos+1);
+                Color newColor = Color.rgb(redAndGreen, redAndGreen,blue);
+                
                 imageRelief.setRGB(i, j, newColor.toAPIColor().getRGB());
             }
         }
         return imageRelief;
     }
     
+    // Retourne la matrice definissant le floutage vertical (à partir duquel peut etre extrapolé)
     private ConvolveOp gaussianVerticalKernel(double radius) {
+        
         double o = radius/3d;
         int r = (int) Math.ceil(radius);
         int n =  (2*r+1);
@@ -95,8 +115,14 @@ public class ReliefShader {
         return new ConvolveOp (new Kernel(1,n,data), ConvolveOp.EDGE_NO_OP , null);   
     }
     
+    // Applique le floutage à la carte 
     private BufferedImage applyKernel(BufferedImage image, ConvolveOp verticalConvolution) {
-        ConvolveOp horizontalConvolution = new ConvolveOp(new Kernel(verticalConvolution.getKernel().getHeight(),verticalConvolution.getKernel().getWidth(),verticalConvolution.getKernel().getKernelData(null)),ConvolveOp.EDGE_NO_OP,new RenderingHints(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON));
+       
+        Kernel k = new Kernel(verticalConvolution.getKernel().getHeight(),
+                              verticalConvolution.getKernel().getWidth(),
+                              verticalConvolution.getKernel().getKernelData(null));
+        
+        ConvolveOp horizontalConvolution = new ConvolveOp(k,ConvolveOp.EDGE_NO_OP,null);
         return horizontalConvolution.filter(verticalConvolution.filter(image, null),null);
     }
 }
