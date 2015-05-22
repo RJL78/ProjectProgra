@@ -54,12 +54,11 @@ public class Java2DCanvas implements Canvas {
     
     /**
      * Permet d'obtenir l'image de la toile
-     * 
+     * ATTENTION : modifier l'image retournée peut perturber le comportement de cette classe
      * @return image de la toile
      */
-    //!!! ASK TA !!! Immuabilité? 
     public BufferedImage image() {
-        return image;
+        return image; 
     }
     
     /**
@@ -114,8 +113,7 @@ public class Java2DCanvas implements Canvas {
         Point firstPoint = coordinateChange.apply(polyline.firstPoint());
         path.moveTo(firstPoint.x(),firstPoint.y());
         List<Point> remainingPoints = polyline.points().subList(1,polyline.points().size());
-        
-      //!!! ASK TA !!! Confirmer efficacite
+ 
         for (Point point: remainingPoints) {
             point = coordinateChange.apply(point);
             path.lineTo(point.x(), point.y());

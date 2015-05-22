@@ -34,25 +34,30 @@ import ch.epfl.imhof.projection.Projection;
  * 
  * 
  * @author Raphael Laporte (251209) / Romain Leteurtre (238162)
+ * 
  *
  */
-public class Main {
-  // je les mets en prive pour pas avoir à les commenter...   
+
+
+public class Main { 
+  
    private final static double INCHES_PER_METER = 39.370;
    private final static double MILLIMETERS_PER_INCH = 25.4;
    private final static double ASPECT_RATIO = 25000;
    private final static Vector3 LIGHTING_VECTOR = new Vector3(-1,1,1);
    private final static Projection PROJECTION = new CH1903Projection();
    private final static double BLURR_RADIUS_MM = 1.7;
-
-    public static void main1(String [] args) throws IOException,SAXException,Exception {
+   
+   /**
+    * @throw Exception : si les fichiers utilisés ne sont pas lisibles, les arguments sont faux 
+    */
+    public static void main1(String [] args) throws Exception {
          
         PointGeo topRightGeo = new PointGeo(Math.toRadians(Double.parseDouble(args[4])), Math.toRadians(Double.parseDouble(args[5])));
         PointGeo bottomLeftGeo = new PointGeo(Math.toRadians(Double.parseDouble(args[2])), Math.toRadians(Double.parseDouble(args[3])));
         Point topRight = PROJECTION.project(topRightGeo);
         Point bottomLeft = PROJECTION.project(bottomLeftGeo);
-        // !!! ASK TA !!! es ce qu'elle est degueu cette ligne de code?
-        // + Should we be using top right bottom left dans shaded relief
+
         int height = (int)(Math.round(Double.parseDouble(args[6])*INCHES_PER_METER*Earth.RADIUS*(topRightGeo.latitude()-bottomLeftGeo.latitude())/ASPECT_RATIO));
         int width = (int)Math.round(height*(topRight.x()-bottomLeft.x())/(topRight.y()-bottomLeft.y()));
        
@@ -70,7 +75,6 @@ public class Main {
             }
         }
         ImageIO.write(mainImage, "png", new File(args[7]));
-        // finalImage not useful... we could just iterate with mainImage.setRGB() unless Immuablilité? 
     }
     
     public static void main(String [] args) throws IOException,SAXException, Exception{

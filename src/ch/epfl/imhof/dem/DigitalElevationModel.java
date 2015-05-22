@@ -22,6 +22,8 @@ public interface DigitalElevationModel extends AutoCloseable {
     /**
      * Méthode héritée de AutoCloseable. 
      * Garanti la fermeture du fichier qui est lu.
+     * 
+     * @throws: Exception - si les ressources ouvertes ne peuvent pas etre fermées
      */
     public void close() throws Exception;
 }

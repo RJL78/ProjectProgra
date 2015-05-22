@@ -42,8 +42,6 @@ public class ReliefShader {
        this.lightVector=lightVector;
     }
     
-    // Does our shit work for something on the other side of the world? 
-    // !!! ASK TA !!! Points en argument a mettre en Radians - change input type?
     /**
      * Retourne une image représentant la topographie de la zone dans le rectangle formé par bottomLeftPoint et par topRightPoint
      * 
@@ -55,7 +53,7 @@ public class ReliefShader {
      * @return une image représentant la topographie de la zone 
      * @throws Exception 
      */
- // !!! ASK TA !!! What exceptions should be thrown?
+
     public BufferedImage shadedRelief(Point bottomLeftPoint, Point topRightPoint, int pixelHeight, int pixelWidth, double blurRadius) throws Exception   {
        
         if (blurRadius<0) throw new IllegalArgumentException (); 
@@ -80,7 +78,6 @@ public class ReliefShader {
                 Point mapPoint = coordinateChange.apply(new Point(i,j));
                 PointGeo geoPoint = projection.inverse(mapPoint);
                 Vector3 pointVector = model.normalAt(geoPoint);
-                // !! ask TA !! pathetic desire to use itermediate variables 
                 
                 double angleCos = pointVector.scalarProduct(lightVector)/(pointVector.norm()*lightVector.norm());
                 double redAndGreen = 0.5*(angleCos+1);

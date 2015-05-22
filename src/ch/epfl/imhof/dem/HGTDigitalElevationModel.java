@@ -62,16 +62,20 @@ public class HGTDigitalElevationModel implements DigitalElevationModel {
     }       
     
     /**
-     * Méthode vide: est nécéssaire car DigitalEvationModel implémente AutoCloseable - cependant, le constructeur de 
-     * cette classe assure déjà que les ressources seront fermées. 
+     * @override 
+     * 
+     * Garanti la fermeture des ressources utilisées
+     * @throws: Exception lancée si les ressources overtes ne peuvent pas etre fermées
      */
-    public void close() throws IOException{
+    public void close() throws Exception{
         stream.close();
         buffer = null; 
     }
    
     /**
-     * Methode qui prend un point en coordonnées WGS 84 en argument et qui retourne le vecteur normal à la Terre en ce point, 
+     * @override 
+     * 
+     * Méthode qui prend un point en coordonnées WGS 84 en argument et qui retourne le vecteur normal à la Terre en ce point, 
      * 
      * @param point : Point à la suface de la Terre
      * @return : Le vecteur normal à la surface en le point pris en argument. 
