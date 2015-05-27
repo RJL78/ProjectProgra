@@ -79,6 +79,7 @@ public class HGTDigitalElevationModel implements DigitalElevationModel {
      * 
      * @param point : Point à la suface de la Terre
      * @return : Le vecteur normal à la surface en le point pris en argument. 
+     * 
      * @throws IllegalArgumentException: lancée si le point pris en argument n'est pas dans la zone couverte par le fichier HGT mis en paramètre dans le constructeur. 
      */
     public Vector3 normalAt(PointGeo point) throws IllegalArgumentException{

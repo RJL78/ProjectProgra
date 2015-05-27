@@ -41,6 +41,8 @@ public class LineStyle {
      * @param lineEnd : terminaision de la ligne
      * @param joint : jointure de la ligne
      * @param lineSequence : séquence d'alternance des segments
+     * 
+     * @throws: IllegalArgumentException si le tableu pris en paramètre contient des nombres négatifs, ou si thickness <0 
      */
     public LineStyle(Color color, float thickness, LINE_END lineEnd, JOINT joint, float[] lineSequence) {
         if (thickness<0)throw new IllegalArgumentException();

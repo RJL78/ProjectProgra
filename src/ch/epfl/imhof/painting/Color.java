@@ -18,7 +18,7 @@ public class Color {
     
     private final double red, green, blue;
 
-    private Color(double red, double green, double blue) throws IllegalArgumentException {
+    private Color(double red, double green, double blue) {
         if (red>1 || red<0 || green>1 || green<0 || blue>1 || blue<0) throw new IllegalArgumentException();
         this.red = red;
         this.green = green; 
@@ -29,8 +29,9 @@ public class Color {
      * Retourne une nuance de gris
      * 
      * @param scale : pourcentage de la nuance de gris
-     * 
      * @return une couleur correspondant à la nuance de gris donnée
+     * 
+     * @throws IllegalArgumentException si un des parametres n'est pas compris entre 0 (inclus) et 1 (inclus) 
      */
     public static Color gray(double scale){
         return new Color(scale,scale,scale); 
@@ -44,6 +45,7 @@ public class Color {
      * @param blue : composante bleue
      * 
      * @return couleur ayant les composantes données
+     * @throws IllegalArgumentException si un des parametres n'est pas compris entre 0 (inclus) et 1 (inclus) 
      */
     public static Color rgb(double red, double green, double blue){
         return new Color (red,green,blue);    
@@ -62,8 +64,8 @@ public class Color {
      * Construit une couleur avec les composantes empaquetées dans l'entier donné
      * 
      * @param bits : entier empaquetant les composantes rouge, verte, et bleue
-     * 
      * @return une couleur avec les composantes données
+     * 
      */
     public static Color rgb(int bits){
         return new Color(((bits >> 16) & 0xFF) / 255d,

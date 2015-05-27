@@ -1,13 +1,9 @@
 package ch.epfl.imhof.dem;
 
-import java.awt.RenderingHints;
+
 import java.awt.image.BufferedImage;
 import java.awt.image.ConvolveOp;
 import java.awt.image.Kernel;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import ch.epfl.imhof.PointGeo;
@@ -51,7 +47,9 @@ public class ReliefShader {
      * @param pixelWidth : Largeur de l'image qui va être retournée ( en pixels ) 
      * @param blurRadius : Le rayon de floutage qui doit être appliqué à l'image
      * @return une image représentant la topographie de la zone 
-     * @throws Exception 
+     * 
+     * @throws IllegalArgumentException si blurRadius<0
+     * @throws Exception : exception remontée de HGTDigitalElevationModel.close() 
      */
 
     public BufferedImage shadedRelief(Point bottomLeftPoint, Point topRightPoint, int pixelHeight, int pixelWidth, double blurRadius) throws Exception   {

@@ -2,11 +2,8 @@ package ch.epfl.imhof;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
 
 import javax.imageio.ImageIO;
-
-import org.xml.sax.SAXException;
 
 import ch.epfl.imhof.dem.Earth;
 import ch.epfl.imhof.dem.HGTDigitalElevationModel;
@@ -49,9 +46,9 @@ public class Main {
    private final static double BLURR_RADIUS_MM = 1.7;
    
    /**
-    * @throw Exception : si les fichiers utilisés ne sont pas lisibles, les arguments sont faux 
+    * @throw Exception : exception remontée de HGTDigitalElevationModel.close() 
     */
-    public static void main1(String [] args) throws Exception {
+    public static void main(String [] args) throws Exception {
          
         PointGeo topRightGeo = new PointGeo(Math.toRadians(Double.parseDouble(args[4])), Math.toRadians(Double.parseDouble(args[5])));
         PointGeo bottomLeftGeo = new PointGeo(Math.toRadians(Double.parseDouble(args[2])), Math.toRadians(Double.parseDouble(args[3])));
@@ -76,14 +73,4 @@ public class Main {
         }
         ImageIO.write(mainImage, "png", new File(args[7]));
     }
-    
-    public static void main(String [] args) throws IOException,SAXException, Exception{
-
-        String[] args1 = {"/Users/Raphael/Sites/ProjectSemester2/src/ch/epfl/imhof/osm/lausanne.osm.gz", "/Users/Raphael/Downloads/imhof-dems/N46E006.hgt", "6.5594", "46.5032", "6.6508", "46.5459",
-                "300", "top.png"};
-
-        main1(args1);
-    }
-
-
 }
