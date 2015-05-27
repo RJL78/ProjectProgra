@@ -80,7 +80,7 @@ public class Main {
     public static void main(String [] args) throws IOException,SAXException, Exception{
 
         String[] args1 = {"/Users/Raphael/Sites/ProjectSemester2/src/ch/epfl/imhof/osm/lausanne.osm.gz", "/Users/Raphael/Downloads/imhof-dems/N46E006.hgt", "6.5594", "46.5032", "6.6508", "46.5459",
-                "300", "topo2.png"};
+                "300", "top.png"};
 
         main1(args1);
     }
